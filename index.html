@@ -195,6 +195,13 @@ body{
 }
 @keyframes sheen{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .brand em{font-style:normal;font-size:9px;letter-spacing:.36em;color:var(--dim-2);text-transform:uppercase;border:1px solid var(--line);padding:5px 9px;border-radius:100px}
+.page-switch{display:flex;gap:4px;margin-top:20px;padding:3px;border:1px solid var(--line);border-radius:100px;width:fit-content}
+.page-switch span,.page-switch a{
+  font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;
+  color:var(--dim-2);padding:9px 16px;border-radius:100px;transition:.35s var(--ease);cursor:none;
+}
+.page-switch a:hover{color:var(--txt);background:rgba(255,255,255,.05)}
+.page-switch .act{background:linear-gradient(150deg,#fff,#ccd2db);color:#07080a;font-weight:600}
 .tagline{margin-top:22px;font-size:clamp(19px,2vw,27px);font-weight:300;line-height:1.34;color:#cfd3db;max-width:15em}
 .tagline b{font-weight:600;color:#fff}
 .claim{margin-top:16px;font-size:13px;line-height:1.7;color:var(--dim);max-width:30em;font-weight:300}
@@ -652,6 +659,10 @@ body.lite .dot,body.lite .ok-c::before,body.lite .ok-c::after,body.lite .nfc i{a
   <!-- IZQUIERDA -->
   <div class="col-left">
     <div class="brand reveal d1"><h1>NEXO</h1><em>Demo v0.1</em></div>
+    <div class="page-switch reveal d1">
+      <span class="act">La app</span>
+      <a href="negocio.html">Modelo de negocio</a>
+    </div>
     <p class="tagline reveal d2">Entrena como quieras.<br><b>En un espacio solo para ti.</b></p>
     <p class="claim reveal d3">Red de salas privadas y equipadas para entrenamiento funcional. Se reservan por horas desde la app, con acceso autónomo y un marketplace opcional de entrenadores independientes.</p>
 
@@ -815,6 +826,14 @@ body.lite .dot,body.lite .ok-c::before,body.lite .ok-c::after,body.lite .nfc i{a
                   <div class="g">Cámaras de control de aforo<s>Sin grabación · solo recuento</s></div><span class="badge ok">Aceptado</span></div>
                 <div class="pitem"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
                   <div class="g">Datos de salud y objetivos<s>Compartidos solo con tu entrenador</s></div><span class="badge warn">Parcial</span></div>
+              </div>
+
+              <div class="eyebrow">Documentación</div>
+              <div class="plist">
+                <a class="pitem" href="negocio.html" style="text-decoration:none;color:inherit">
+                  <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 4h9l5 5v11H5z"/><path d="M14 4v5h5M8 13h8M8 17h5"/></svg></div>
+                  <div class="g">Modelo de negocio<s>Presentación completa de NEXO</s></div>
+                  <svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></a>
               </div>
 
               <button class="btn sec" style="margin-top:18px" data-toast="Sesión cerrada — es una demo, sigues dentro">Cerrar sesión</button>
@@ -1331,7 +1350,7 @@ function tpl(){
     <div class="summary">
       <div class="sline"><span>Sala · ${p.horas} h × 18 €</span><span>${p.sala} €</span></div>
       ${t?`<div class="sline"><span>${t.n} · ${p.horas} h × ${t.p} €</span><span>${p.tr} €</span></div>`:''}
-      <div class="sline"><span>Cancelación gratuita</span><span style="color:var(--ok)">Hasta 12 h antes</span></div>
+      <div class="sline"><span>Cancelación gratuita</span><span style="color:var(--ok)">Hasta 24 h antes</span></div>
       <div class="sline tot"><span>Total</span><span>${p.total} €</span></div>
     </div>
     <div class="pitem" style="border:1px solid var(--line);border-radius:14px;margin-top:12px">

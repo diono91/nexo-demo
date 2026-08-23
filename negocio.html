@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NEXO — Modelo de negocio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   NEXO — Presentación del modelo de negocio
+   Misma sala, misma luz que la demo de producto.
+   ============================================================ */
+
+:root{
+  --bg:#040406;
+  --panel:#0c0d11;
+  --line:rgba(255,255,255,.085);
+  --line-strong:rgba(255,255,255,.17);
+  --txt:#eef0f4;
+  --dim:#8d939e;
+  --dim-2:#5d636e;
+  --cold:#cfe0ff;
+  --ok:#8ef0c0;
+  --warn:#ffd9a0;
+  --silver:linear-gradient(160deg,#ffffff 0%,#c9ced8 22%,#7e848f 46%,#e9edf3 62%,#9aa0ab 82%,#f4f6fa 100%);
+  --ease:cubic-bezier(.16,1,.3,1);
+  --pad:clamp(22px,6vw,120px);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--txt);
+  font-family:'Inter Tight','Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:rgba(207,224,255,.25)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--cold);outline-offset:3px;border-radius:4px}
+
+/* ---------- LA SALA (fondo fijo) ---------- */
+.stage{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.room{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(120% 70% at 50% -8%, rgba(190,215,255,.09) 0%, transparent 55%),
+    radial-gradient(70% 50% at 10% 30%, rgba(255,255,255,.04) 0%, transparent 60%),
+    radial-gradient(70% 50% at 90% 62%, rgba(255,255,255,.035) 0%, transparent 60%),
+    linear-gradient(180deg,#07080b 0%,#040406 50%,#020203 100%);
+}
+.beam{
+  position:absolute;top:-14vh;width:32vw;height:128vh;
+  background:linear-gradient(180deg,rgba(255,255,255,.16) 0%,rgba(216,232,255,.07) 20%,rgba(190,215,255,.028) 46%,transparent 78%);
+  clip-path:polygon(41% 0%,59% 0%,100% 100%,0% 100%);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 26%,#000 74%,transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0%,#000 26%,#000 74%,transparent 100%);
+  transform-origin:50% 0%;will-change:transform;backface-visibility:hidden;
+}
+.beam.b1{left:-5vw;animation:sway1 19s ease-in-out infinite}
+.beam.b2{left:34vw;animation:sway2 23s ease-in-out infinite;opacity:.7}
+.beam.b3{right:-7vw;animation:sway3 21s ease-in-out infinite}
+@keyframes sway1{0%,100%{transform:rotate(7deg)}50%{transform:rotate(12deg)}}
+@keyframes sway2{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
+@keyframes sway3{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(-13deg)}}
+.lamp{position:absolute;top:-2px;width:120px;height:4px;border-radius:0 0 40px 40px;
+  background:linear-gradient(180deg,#fff,#cfe0ff 60%,rgba(207,224,255,0));
+  box-shadow:0 0 36px 10px rgba(207,224,255,.42),0 0 110px 26px rgba(160,190,255,.16)}
+.lamp.l1{left:7vw}.lamp.l2{left:calc(50vw - 60px)}.lamp.l3{right:7vw}
+.grain{
+  position:absolute;inset:0;opacity:.028;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+}
+.vig{position:absolute;inset:0;background:radial-gradient(120% 85% at 50% 45%,transparent 42%,rgba(0,0,0,.7) 100%)}
+
+/* ---------- NAVEGACIÓN ---------- */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px var(--pad);
+  background:linear-gradient(180deg,rgba(4,4,6,.92),rgba(4,4,6,0));
+}
+.nav-mark{font-size:15px;font-weight:800;letter-spacing:.3em;text-indent:.3em;
+  background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links a{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;
+  color:var(--dim-2);padding:9px 15px;border-radius:100px;border:1px solid transparent;transition:.35s var(--ease);
+}
+.nav-links a:hover{color:var(--txt)}
+.nav-links a.act{color:var(--txt);border-color:var(--line-strong);background:rgba(255,255,255,.045)}
+.prog{position:fixed;top:0;left:0;right:0;height:1px;z-index:61;background:rgba(255,255,255,.07)}
+.prog i{display:block;height:100%;width:100%;transform:scaleX(0);transform-origin:0 50%;
+  background:linear-gradient(90deg,#7f8894,#fff);will-change:transform}
+
+/* ---------- RAÍL DE CAPÍTULOS ---------- */
+.rail{
+  position:fixed;left:24px;top:50%;transform:translateY(-50%);z-index:55;
+  display:flex;flex-direction:column;gap:1px;
+}
+@media (max-width:1240px){.rail{display:none}}
+.rail a{
+  display:flex;align-items:center;gap:10px;text-decoration:none;padding:5px 0;
+  color:var(--dim-2);font-size:10px;letter-spacing:.1em;transition:.35s var(--ease);
+}
+.rail a i{display:block;width:14px;height:1px;background:currentColor;transition:.35s var(--ease);flex:0 0 auto}
+.rail a span{opacity:0;transform:translateX(-6px);transition:.35s var(--ease);white-space:nowrap}
+.rail:hover a span{opacity:1;transform:none}
+.rail a.act{color:#fff}
+.rail a.act i{width:30px;background:#fff;box-shadow:0 0 10px rgba(207,224,255,.8)}
+.rail a.act span{opacity:1;transform:none}
+
+/* ---------- ESTRUCTURA ---------- */
+main{position:relative;z-index:10}
+section{padding:clamp(90px,13vh,170px) var(--pad);position:relative}
+.wrap{max-width:1180px;margin:0 auto}
+.narrow{max-width:760px}
+
+.chapter{display:flex;align-items:baseline;gap:16px;margin-bottom:30px}
+.chapter b{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--cold);letter-spacing:.1em}
+.chapter s{flex:1;height:1px;background:var(--line);text-decoration:none}
+.chapter em{font-style:normal;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim-2)}
+
+h2{
+  font-size:clamp(31px,5.2vw,62px);font-weight:700;letter-spacing:-.035em;line-height:1.03;
+  text-wrap:balance;margin-bottom:26px;
+}
+h2 .sil{background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
+h3{font-size:clamp(17px,2.1vw,22px);font-weight:600;letter-spacing:-.015em;line-height:1.25}
+.lead{font-size:clamp(15.5px,1.6vw,19px);line-height:1.72;color:#c2c7d0;max-width:62ch;font-weight:300}
+.lead+.lead{margin-top:16px}
+p.sm{font-size:14.5px;line-height:1.75;color:var(--dim);max-width:66ch}
+
+.quote{
+  font-size:clamp(21px,3.1vw,36px);font-weight:300;line-height:1.32;letter-spacing:-.02em;
+  color:#e9ecf1;text-wrap:balance;border-left:1px solid var(--line-strong);padding-left:clamp(18px,3vw,34px);
+}
+.quote b{font-weight:600;background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- REJILLAS ---------- */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g5{grid-template-columns:repeat(5,1fr)}
+@media (max-width:1000px){.g4,.g5{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr 1fr}}
+@media (max-width:680px){.g2,.g3,.g4,.g5{grid-template-columns:1fr}}
+
+.card{
+  border:1px solid var(--line);border-radius:16px;padding:clamp(18px,2.2vw,26px);
+  background:linear-gradient(158deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  transition:border-color .45s var(--ease),transform .45s var(--ease);
+  display:flex;flex-direction:column;gap:12px;
+}
+.card:hover{border-color:var(--line-strong);transform:translateY(-3px)}
+.card .k{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cold);letter-spacing:.08em}
+.card p{font-size:14px;line-height:1.7;color:var(--dim)}
+.card.flat:hover{transform:none}
+
+.list{display:flex;flex-direction:column;gap:11px}
+.list li{list-style:none;display:flex;gap:12px;font-size:14.5px;line-height:1.6;color:var(--dim)}
+.list li::before{content:"";flex:0 0 auto;width:5px;height:5px;border-radius:50%;background:var(--cold);margin-top:8px;opacity:.75}
+.list.tight li{font-size:13.5px}
+
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;
+  padding:6px 12px;border-radius:100px;border:1px solid var(--line-strong);color:var(--dim);width:fit-content}
+.pill.cold{color:var(--cold);border-color:rgba(207,224,255,.3);background:rgba(207,224,255,.06)}
+.pill.ok{color:var(--ok);border-color:rgba(142,240,192,.3);background:rgba(142,240,192,.06)}
+.pill.warn{color:var(--warn);border-color:rgba(255,217,160,.28);background:rgba(255,217,160,.06)}
+
+/* ---------- PORTADA ---------- */
+.cover{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:110px}
+.cover-mark{
+  font-size:clamp(64px,17vw,220px);font-weight:800;letter-spacing:.18em;text-indent:.18em;line-height:.9;
+  filter:drop-shadow(0 0 42px rgba(200,225,255,.22));
+}
+.cover-mark span{
+  display:inline-block;opacity:0;transform:translateY(30px);
+  background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:letterIn 1s var(--ease) forwards;
+}
+@keyframes letterIn{to{opacity:1;transform:none}}
+.cover h1{
+  font-size:clamp(26px,4.4vw,52px);font-weight:300;line-height:1.18;letter-spacing:-.025em;
+  margin-top:34px;max-width:17ch;text-wrap:balance;
+}
+.cover h1 b{font-weight:600}
+.cover .sub{margin-top:26px;font-size:15px;line-height:1.75;color:var(--dim);max-width:56ch}
+.cover-meta{display:flex;gap:28px;flex-wrap:wrap;margin-top:44px;padding-top:26px;border-top:1px solid var(--line)}
+.cover-meta div{display:flex;flex-direction:column;gap:6px}
+.cover-meta b{font-size:19px;font-weight:600;background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cover-meta s{text-decoration:none;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim-2)}
+.scroll-cue{margin-top:52px;display:flex;align-items:center;gap:12px;font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--dim-2)}
+.scroll-cue i{display:block;width:1px;height:34px;background:linear-gradient(180deg,rgba(255,255,255,.5),transparent);animation:cue 2.4s var(--ease) infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:0 0}45%{transform:scaleY(1);transform-origin:0 0}55%{transform:scaleY(1);transform-origin:0 100%}100%{transform:scaleY(0);transform-origin:0 100%}}
+
+/* ---------- PROBLEMA (dos caras) ---------- */
+.face{
+  border:1px solid var(--line);border-radius:20px;padding:clamp(22px,2.8vw,34px);
+  background:linear-gradient(158deg,rgba(255,255,255,.05),rgba(255,255,255,.012));
+  display:flex;flex-direction:column;gap:16px;position:relative;overflow:hidden;
+}
+.face::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(207,224,255,.55),transparent)}
+.face .n{font-family:'JetBrains Mono',monospace;font-size:34px;font-weight:400;color:rgba(255,255,255,.13);line-height:1}
+.face .q{font-size:clamp(17px,2vw,21px);font-weight:400;line-height:1.4;letter-spacing:-.015em;color:#e6e9ef}
+.face p{font-size:14px;line-height:1.72;color:var(--dim)}
+
+/* ---------- FLUJO NUMERADO ---------- */
+.flow{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+.step{
+  display:grid;grid-template-columns:70px 1fr;gap:clamp(14px,2.4vw,34px);align-items:start;
+  padding:22px 0;border-bottom:1px solid var(--line);transition:.4s var(--ease);
+}
+.step:hover{background:linear-gradient(90deg,rgba(255,255,255,.035),transparent)}
+.step .num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cold);padding-top:4px}
+.step h3{margin-bottom:7px}
+.step p{font-size:13.5px;line-height:1.68;color:var(--dim);max-width:64ch}
+@media (max-width:600px){.step{grid-template-columns:40px 1fr}}
+
+/* ---------- MODELO ECONÓMICO ---------- */
+.eq{display:flex;align-items:stretch;gap:14px;flex-wrap:wrap}
+.eq .term{
+  flex:1 1 260px;border:1px solid var(--line);border-radius:16px;padding:24px;
+  background:linear-gradient(158deg,rgba(255,255,255,.05),rgba(255,255,255,.012));
+  display:flex;flex-direction:column;gap:10px;
+}
+.eq .term .who{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim-2)}
+.eq .term .what{font-size:20px;font-weight:600;letter-spacing:-.02em}
+.eq .term p{font-size:13.5px;line-height:1.68;color:var(--dim)}
+.eq .op{display:grid;place-items:center;font-size:26px;font-weight:200;color:var(--dim-2);min-width:26px}
+/* apilado: el operador pasa a ir centrado entre tarjeta y tarjeta */
+@media (max-width:820px){
+  .eq{flex-direction:column;gap:10px}
+  .eq .term{flex:1 1 auto}
+  .eq .op{min-height:26px;font-size:22px}
+}
+
+.open-list{display:flex;flex-wrap:wrap;gap:8px}
+.open-list span{
+  font-size:12px;color:var(--dim);border:1px dashed rgba(255,255,255,.16);
+  padding:9px 14px;border-radius:100px;background:rgba(255,255,255,.02);transition:.35s var(--ease);
+}
+.open-list span:hover{color:var(--txt);border-color:var(--line-strong)}
+
+/* ---------- REGLAS ---------- */
+.rule{
+  display:flex;gap:18px;align-items:flex-start;padding:20px 0;border-bottom:1px solid var(--line);
+}
+.rule:last-child{border-bottom:0}
+.rule .v{
+  font-family:'JetBrains Mono',monospace;font-size:clamp(24px,3.4vw,38px);font-weight:400;letter-spacing:-.03em;
+  background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent;
+  flex:0 0 clamp(96px,13vw,150px);line-height:1.05;
+}
+.rule .g h3{margin-bottom:7px}
+.rule .g p{font-size:13.5px;line-height:1.7;color:var(--dim);max-width:60ch}
+
+/* ---------- TABLA COMPARATIVA ---------- */
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.02)}
+table{width:100%;border-collapse:collapse;min-width:620px}
+th,td{padding:15px 18px;text-align:left;font-size:13.5px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{
+  font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim-2);font-weight:500;
+  background:rgba(255,255,255,.03);position:sticky;top:0;
+}
+thead th:last-child{color:var(--cold)}
+tbody td:first-child{color:var(--dim-2);font-size:12px;letter-spacing:.04em;width:24%}
+tbody td:nth-child(2){color:var(--dim)}
+tbody td:last-child{color:var(--txt);font-weight:400}
+tbody tr:last-child td{border-bottom:0}
+tbody tr{transition:background .35s var(--ease)}
+tbody tr:hover{background:rgba(255,255,255,.028)}
+/* En pantalla estrecha la tabla se convierte en tarjetas: si no, la columna
+   de NEXO — la que importa — queda fuera del área visible */
+@media (max-width:760px){
+  .tscroll{overflow-x:visible;border:0;background:none;border-radius:0}
+  table{min-width:0;display:block}
+  thead{display:none}
+  tbody{display:flex;flex-direction:column;gap:10px}
+  tbody tr{
+    display:block;border:1px solid var(--line);border-radius:14px;padding:17px;
+    background:linear-gradient(158deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  }
+  tbody td{display:block;border:0;padding:0}
+  tbody td:first-child{
+    width:auto;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--dim-2);margin-bottom:14px;
+  }
+  tbody td[data-label]::before{
+    content:attr(data-label);display:block;font-size:8.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--dim-2);margin-bottom:5px;
+  }
+  tbody td:nth-child(2){margin-bottom:13px;padding-bottom:13px;border-bottom:1px solid var(--line)}
+  tbody td:last-child::before{color:var(--cold)}
+}
+
+/* ---------- MÉTRICAS ---------- */
+.metric{
+  border:1px solid var(--line);border-radius:16px;padding:22px;
+  background:linear-gradient(158deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  display:flex;flex-direction:column;gap:12px;
+}
+.metric .f{
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--cold);line-height:1.6;
+  background:rgba(207,224,255,.05);border:1px solid rgba(207,224,255,.16);border-radius:10px;padding:11px 13px;
+}
+.metric h3{font-size:16px}
+.metric p{font-size:13px;line-height:1.65;color:var(--dim)}
+
+.bands{display:flex;gap:6px;align-items:flex-end;height:120px;margin-top:6px}
+.band{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:9px;text-align:center}
+.band i{
+  display:block;width:100%;border-radius:6px 6px 3px 3px;transform-origin:50% 100%;transform:scaleY(0);
+  background:linear-gradient(180deg,rgba(207,224,255,.75),rgba(207,224,255,.14));
+  transition:transform 1.1s var(--ease);
+}
+.on .band i{transform:scaleY(1)}
+.band s{text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim-2);letter-spacing:.02em}
+
+/* ---------- ÁRBOL ---------- */
+.tree{
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:2;color:var(--dim);
+  border:1px solid var(--line);border-radius:16px;padding:clamp(18px,2.6vw,30px);
+  background:rgba(255,255,255,.022);overflow-x:auto;white-space:pre;
+}
+.tree b{color:var(--txt);font-weight:400}
+.tree em{font-style:normal;color:var(--cold)}
+
+/* ---------- FASES ---------- */
+.phase{border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.phase .h{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:9px}
+.phase .h b{font-size:16px;font-weight:600}
+.phase .b{padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.phase .b span{font-size:13px;color:var(--dim);display:flex;gap:10px;line-height:1.5}
+.phase .b span i{flex:0 0 auto;width:11px;height:11px;margin-top:4px;opacity:.8}
+.phase.now{background:linear-gradient(158deg,rgba(255,255,255,.055),rgba(255,255,255,.012));border-color:var(--line-strong)}
+.phase.later{background:rgba(255,255,255,.018)}
+.phase.never{background:rgba(255,255,255,.012)}
+.phase.never .b span{color:var(--dim-2);text-decoration:line-through;text-decoration-color:rgba(255,255,255,.2)}
+
+/* ---------- CIERRE ---------- */
+.close{min-height:88svh;display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center}
+.close .big{
+  font-size:clamp(28px,5.4vw,64px);font-weight:300;line-height:1.16;letter-spacing:-.03em;
+  max-width:19ch;text-wrap:balance;
+}
+.close .big b{font-weight:700;background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cta{
+  display:inline-flex;align-items:center;gap:12px;margin-top:44px;text-decoration:none;
+  padding:17px 30px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:#07080a;background:linear-gradient(150deg,#ffffff,#d3d8e0 46%,#ffffff);
+  box-shadow:0 12px 34px rgba(180,205,255,.22);transition:transform .35s var(--ease),box-shadow .35s var(--ease);
+  position:relative;overflow:hidden;
+}
+.cta:hover{transform:translateY(-2px);box-shadow:0 18px 44px rgba(180,205,255,.3)}
+.cta svg{width:15px;height:15px;stroke:#07080a;fill:none;stroke-width:2}
+.foot{
+  padding:38px var(--pad) 46px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim-2);position:relative;z-index:10;
+}
+
+/* ---------- REVELADO AL DESLIZAR ---------- */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .95s var(--ease),transform .95s var(--ease)}
+.rv.on{opacity:1;transform:none}
+.rv.d1{transition-delay:.07s}.rv.d2{transition-delay:.14s}.rv.d3{transition-delay:.21s}
+.rv.d4{transition-delay:.28s}.rv.d5{transition-delay:.35s}
+
+/* ---------- MODO LIGERO / MOVIMIENTO REDUCIDO ---------- */
+body.lite .beam{animation:none;opacity:.5}
+body.lite .grain{display:none}
+body.lite .scroll-cue i{animation:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.1ms!important}
+  .rv{opacity:1;transform:none}
+  .band i{transform:scaleY(1)}
+}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="room"></div>
+  <div class="beam b1"></div><div class="beam b2"></div><div class="beam b3"></div>
+  <div class="lamp l1"></div><div class="lamp l2"></div><div class="lamp l3"></div>
+  <div class="grain"></div>
+  <div class="vig"></div>
+</div>
+
+<div class="prog"><i id="progBar"></i></div>
+
+<nav class="nav">
+  <div class="nav-mark">NEXO</div>
+  <div class="nav-links">
+    <a href="#portada" class="act">Negocio</a>
+    <a href="index.html">La app</a>
+  </div>
+</nav>
+
+<div class="rail" id="rail"></div>
+
+<main>
+
+<!-- ============ PORTADA ============ -->
+<section id="portada" class="cover">
+  <div class="wrap">
+    <div class="cover-mark" id="coverMark"></div>
+    <h1 class="rv d2">Entrena como quieras.<br><b>En un espacio solo para ti.</b></h1>
+    <p class="sub rv d3">Una red de salas privadas y totalmente equipadas para entrenamiento funcional, que se reservan por horas desde una app, con acceso autónomo y un marketplace opcional de entrenadores independientes.</p>
+    <div class="cover-meta rv d4">
+      <div><b>1</b><s>Centro piloto</s></div>
+      <div><b>8+1</b><s>Aforo por reserva</s></div>
+      <div><b>24/7</b><s>Sin recepción</s></div>
+      <div><b>0</b><s>Cuotas mensuales</s></div>
+    </div>
+    <div class="scroll-cue rv d5"><i></i> Desliza para recorrer el modelo</div>
+  </div>
+</section>
+
+<!-- ============ 01 PROBLEMA ============ -->
+<section id="problema">
+  <div class="wrap">
+    <div class="chapter rv"><b>01</b><s></s><em>El problema</em></div>
+    <h2 class="rv d1">Dos necesidades que <span class="sil">nadie resuelve<br>a la vez</span></h2>
+    <p class="lead rv d2" style="margin-bottom:44px">El negocio no nace de una intuición sobre el fitness, sino de dos carencias concretas que hoy se resuelven mal por separado.</p>
+    <div class="grid g2">
+      <div class="face rv d2">
+        <div class="n">01</div>
+        <div class="q">“No tengo dónde entrenar como quiero.”</div>
+        <p>El alumno no siempre dispone de un espacio privado, profesional y suficientemente equipado para hacer el entrenamiento que necesita. El gimnasio convencional está lleno, el material está ocupado y una sesión personal en mitad de la sala común no funciona.</p>
+      </div>
+      <div class="face rv d3">
+        <div class="n">02</div>
+        <div class="q">“Tengo clientes, pero no tengo local.”</div>
+        <p>Muchos entrenadores personales tienen conocimientos y especialidades que un gimnasio convencional no ofrece, pero no disponen de un espacio profesional donde llevar a sus clientes. Montar un local propio es una barrera de entrada que la mayoría no puede asumir.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 QUÉ ES ============ -->
+<section id="que-es">
+  <div class="wrap">
+    <div class="chapter rv"><b>02</b><s></s><em>La propuesta</em></div>
+    <h2 class="rv d1">No es un gimnasio.<br><span class="sil">Es infraestructura.</span></h2>
+    <p class="lead rv d2">NEXO aporta el espacio físico, el equipamiento, la gestión de reservas y el acceso automatizado. No pretende ser un gimnasio tradicional ni contratar a los entrenadores. Es la combinación de cinco cosas que ya funcionan por separado.</p>
+    <div class="grid g5" style="margin-top:44px">
+      <div class="card rv d1"><span class="k">01</span><h3>Alquiler por horas</h3><p>Espacios profesionales que se pagan por uso, no por cuota mensual.</p></div>
+      <div class="card rv d2"><span class="k">02</span><h3>Marketplace</h3><p>Entrenadores independientes con ficha, precio y valoraciones propias.</p></div>
+      <div class="card rv d3"><span class="k">03</span><h3>Plataforma de reservas</h3><p>Disponibilidad en tiempo real, reserva inmediata y recurrencias.</p></div>
+      <div class="card rv d4"><span class="k">04</span><h3>Acceso autónomo</h3><p>Cerradura inteligente y códigos temporales ligados a cada reserva.</p></div>
+      <div class="card rv d5"><span class="k">05</span><h3>Red centralizada</h3><p>Un solo sistema para gestionar todos los centros que vengan después.</p></div>
+    </div>
+    <div class="quote rv d3" style="margin-top:56px">Coworking + Airbnb + marketplace de entrenadores + gimnasio privado.<br><b>Pero el usuario no debe percibir ninguna complejidad.</b></div>
+  </div>
+</section>
+
+<!-- ============ 03 CÓMO FUNCIONA ============ -->
+<section id="como">
+  <div class="wrap">
+    <div class="chapter rv"><b>03</b><s></s><em>La experiencia</em></div>
+    <h2 class="rv d1">Seis pasos, <span class="sil">sin hablar con nadie</span></h2>
+    <p class="lead rv d2" style="margin-bottom:40px">La secuencia completa, desde que alguien decide entrenar hasta que sale por la puerta. Cada paso ocurre dentro de la app; ninguno requiere personal en el centro.</p>
+    <div class="flow">
+      <div class="step rv"><div class="num">01</div><div><h3>Buscar</h3><p>El usuario consulta la disponibilidad real de la sala. Si está libre ahora mismo, puede reservar de forma inmediata: no es obligatorio anticiparse.</p></div></div>
+      <div class="step rv d1"><div class="num">02</div><div><h3>Reservar</h3><p>Elige fecha, hora de inicio, duración y número de participantes. Decide si entrena solo, con otras personas o con entrenador. La franja queda bloqueada para el resto en el momento de confirmar.</p></div></div>
+      <div class="step rv d1"><div class="num">03</div><div><h3>Pagar</h3><p>El cobro se hace desde la app. Si ha contratado entrenador, la sala y el profesional son conceptos separados dentro del mismo pago.</p></div></div>
+      <div class="step rv d2"><div class="num">04</div><div><h3>Entrar</h3><p>La reserva confirmada genera el acceso: apertura desde la app o código temporal, válido solo durante una ventana ligada a la reserva.</p></div></div>
+      <div class="step rv d2"><div class="num">05</div><div><h3>Entrenar</h3><p>La sala entera es suya. Puede invitar participantes y compartir la reserva por WhatsApp. Ningún otro grupo entra durante esa franja.</p></div></div>
+      <div class="step rv d3"><div class="num">06</div><div><h3>Salir</h3><p>La reserva queda registrada en el historial de ambas partes. Después puede valorar al entrenador, y esa valoración queda vinculada a una sesión real.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 PRINCIPIOS ============ -->
+<section id="principios">
+  <div class="wrap">
+    <div class="chapter rv"><b>04</b><s></s><em>Principios del modelo</em></div>
+    <h2 class="rv d1">Cuatro decisiones que <span class="sil">sostienen todo lo demás</span></h2>
+    <div class="grid g2" style="margin-top:40px">
+      <div class="card rv d1"><span class="pill cold">Principio 01</span><h3>NEXO aporta el espacio</h3><p>El negocio es propietario y operador de la infraestructura física, no empleador de entrenadores. No depende de contratar a nadie para funcionar: si ningún entrenador se apunta, las salas se siguen alquilando.</p></div>
+      <div class="card rv d2"><span class="pill cold">Principio 02</span><h3>El entrenador fija su precio</h3><p>Cada profesional decide libremente precio, especialidades, experiencia y disponibilidad. No existe una tarifa impuesta desde arriba. NEXO puede poner en contacto a las partes sin que exista relación laboral.</p></div>
+      <div class="card rv d3"><span class="pill cold">Principio 03</span><h3>La sala funciona con o sin entrenador</h3><p>Una reserva puede ser individual o grupal, con o sin profesional, creada por un alumno o por un entrenador. Las dos fuentes de demanda son independientes entre sí.</p></div>
+      <div class="card rv d4"><span class="pill cold">Principio 04</span><h3>Una reserva ocupa la sala entera</h3><p>Nunca coinciden dos grupos distintos. Si un entrenador reserva para seis alumnos, esa reserva bloquea el espacio completo. La privacidad es el producto, no un extra.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 QUIÉN USA ============ -->
+<section id="roles">
+  <div class="wrap">
+    <div class="chapter rv"><b>05</b><s></s><em>Los tres lados</em></div>
+    <h2 class="rv d1">Un alumno, un entrenador<br>y <span class="sil">quien opera el negocio</span></h2>
+    <div class="grid g3" style="margin-top:40px">
+      <div class="card flat rv d1">
+        <span class="pill">Alumno</span>
+        <h3>Reserva un espacio, no una cuota</h3>
+        <ul class="list tight">
+          <li>Reserva sala privada por horas</li>
+          <li>Entrena solo o con amigos</li>
+          <li>Elige entrenador por especialidad, precio y valoración</li>
+          <li>Crea reservas recurrentes</li>
+          <li>Invita y comparte por WhatsApp</li>
+          <li>Paga y accede desde la app</li>
+        </ul>
+      </div>
+      <div class="card flat rv d2">
+        <span class="pill">Entrenador</span>
+        <h3>Un local profesional sin tener local</h3>
+        <ul class="list tight">
+          <li>Reserva la sala para sus propios clientes</li>
+          <li>O capta clientes dentro de NEXO</li>
+          <li>Define precio, especialidades y disponibilidad</li>
+          <li>Crea su perfil profesional público</li>
+          <li>Recibe valoraciones verificadas</li>
+          <li>Consulta reservas e ingresos</li>
+        </ul>
+      </div>
+      <div class="card flat rv d3">
+        <span class="pill">Administración</span>
+        <h3>Operar la red desde un panel</h3>
+        <ul class="list tight">
+          <li>Calendario y gestión de reservas</li>
+          <li>Usuarios, entrenadores y verificación</li>
+          <li>Precios, promociones y descuentos</li>
+          <li>Ingresos, reembolsos y penalizaciones</li>
+          <li>Accesos, equipamiento e incidencias</li>
+          <li>Ocupación y rentabilidad por centro</li>
+        </ul>
+      </div>
+    </div>
+    <p class="sm rv d4" style="margin-top:26px">Un entrenador puede usar NEXO exclusivamente como espacio de trabajo, sin captar un solo cliente a través de la plataforma. Esa opción es deliberada: reduce la dependencia del marketplace en los primeros meses.</p>
+  </div>
+</section>
+
+<!-- ============ 06 MODELO ECONÓMICO ============ -->
+<section id="economia">
+  <div class="wrap">
+    <div class="chapter rv"><b>06</b><s></s><em>Modelo económico</em></div>
+    <h2 class="rv d1">NEXO cobra la sala.<br><span class="sil">El entrenador cobra su trabajo.</span></h2>
+    <p class="lead rv d2" style="margin-bottom:40px">Son dos servicios conceptualmente separados aunque se paguen juntos. Esta separación es lo que permite que el negocio funcione con o sin marketplace.</p>
+    <div class="eq rv d2">
+      <div class="term"><span class="who">Ingreso de NEXO</span><span class="what">Precio de sala</span><p>Por hora reservada, con independencia de cuántas personas entren o de si hay entrenador. Es el ingreso que sostiene la infraestructura.</p></div>
+      <div class="op">+</div>
+      <div class="term"><span class="who">Ingreso del profesional</span><span class="what">Precio del entrenador</span><p>Lo fija cada entrenador. NEXO puede aplicar una comisión sobre esta parte, todavía por determinar.</p></div>
+      <div class="op">=</div>
+      <div class="term" style="border-color:var(--line-strong);background:linear-gradient(158deg,rgba(207,224,255,.12),rgba(255,255,255,.015))"><span class="who">Lo que ve el cliente</span><span class="what">Precio final</span><p>Un único cargo desglosado en la app, para que quede claro qué paga por el espacio y qué paga por el profesional.</p></div>
+    </div>
+    <div style="margin-top:52px">
+      <h3 class="rv d1" style="margin-bottom:8px">Lo que aún no está cerrado</h3>
+      <p class="sm rv d1" style="margin-bottom:20px">Estas variables se dejan configurables a propósito y no se fijan en el código. Son decisiones de negocio que conviene tomar con datos del piloto, no antes.</p>
+      <div class="open-list rv d2">
+        <span>Precio por hora</span><span>Comisión al entrenador</span><span>Reparto de pagos</span>
+        <span>Precio por persona vs. por reserva</span><span>Duraciones exactas</span><span>Bonos</span>
+        <span>Suscripciones</span><span>Tarifas valle / punta</span><span>Proveedor de pagos</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 REGLAS ============ -->
+<section id="reglas">
+  <div class="wrap">
+    <div class="chapter rv"><b>07</b><s></s><em>Reglas de operación</em></div>
+    <h2 class="rv d1">Las cifras que <span class="sil">definen el servicio</span></h2>
+    <div class="narrow" style="margin-top:36px">
+      <div class="rule rv d1"><div class="v">8+1</div><div class="g"><h3>Aforo máximo por reserva</h3><p>Hasta ocho personas más un entrenador. La sala completa queda bloqueada para esa única reserva: nunca se comparte con otro grupo.</p></div></div>
+      <div class="rule rv d1"><div class="v">24 h</div><div class="g"><h3>Cancelación gratuita</h3><p>Hasta veinticuatro horas antes de la sesión, sin coste. Pasado ese plazo se aplica una penalización del 70% del importe. El sistema calcula automáticamente el importe retenido y el reembolsado, y la política es configurable desde administración.</p></div></div>
+      <div class="rule rv d2"><div class="v">10 min</div><div class="g"><h3>Regla de no-show</h3><p>Si transcurren diez minutos desde el inicio de la reserva sin que se presente nadie, la sala puede liberarse. La presencia se detecta mediante la infraestructura de acceso y el control de ocupación.</p></div></div>
+      <div class="rule rv d2"><div class="v">1</div><div class="g"><h3>Una sola reserva por franja</h3><p>Dos usuarios no pueden confirmar la misma franja simultáneamente. La disponibilidad se valida en el servidor, nunca solo en la pantalla. Es el punto crítico de todo el sistema.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 ACCESO ============ -->
+<section id="acceso">
+  <div class="wrap">
+    <div class="chapter rv"><b>08</b><s></s><em>Operación sin personal</em></div>
+    <h2 class="rv d1">El centro funciona <span class="sil">sin recepción</span></h2>
+    <p class="lead rv d2">Es la palanca que hace viable el modelo: sin personal en sala, el coste operativo por hora disponible baja lo suficiente como para que el alquiler por horas tenga margen, y el centro puede abrir las veinticuatro horas.</p>
+    <div class="grid g2" style="margin-top:44px">
+      <div class="card rv d1">
+        <span class="pill cold">Acceso</span>
+        <h3>La reserva es la llave</h3>
+        <p>Una reserva confirmada genera el mecanismo de acceso: apertura desde la app o código temporal. El acceso solo es válido durante una ventana ligada a la sesión, y el código no es reutilizable.</p>
+        <div class="metric" style="padding:14px;margin-top:4px"><div class="f">Reserva 18:00 – 19:00<br>Acceso válido 17:55 – 19:10</div></div>
+      </div>
+      <div class="card rv d2">
+        <span class="pill warn">Privacidad</span>
+        <h3>Cámaras que cuentan, no que vigilan</h3>
+        <p>El centro opera con cámaras para control de ocupación, verificación de entrada y salida, incidencias y aplicación de la regla de no-show. El sistema separa de forma estricta los datos de reserva, los de acceso y las imágenes de videovigilancia.</p>
+        <p>La retención de imágenes y los permisos de consulta son configurables según la normativa aplicable. Los datos de salud que el alumno comparta voluntariamente son opcionales, mínimos y bajo su control.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 09 MARKETPLACE ============ -->
+<section id="marketplace">
+  <div class="wrap">
+    <div class="chapter rv"><b>09</b><s></s><em>Marketplace</em></div>
+    <h2 class="rv d1">El espacio atrae demanda.<br><span class="sil">Los entrenadores la multiplican.</span></h2>
+    <p class="lead rv d2">Cada profesional tiene una ficha pública con fotografía, descripción, experiencia, formación, certificaciones, especialidades, precio, disponibilidad, centros donde trabaja, valoración y número de sesiones realizadas.</p>
+    <div class="grid g3" style="margin-top:44px">
+      <div class="card rv d1"><span class="k">Descubrimiento</span><h3>Búsqueda con filtros reales</h3><p>Centro, disponibilidad, precio, especialidad, experiencia, valoración y tipo de entrenamiento. El alumno que no conoce a ningún entrenador encuentra uno adecuado sin salir de la app.</p></div>
+      <div class="card rv d2"><span class="k">Confianza</span><h3>Valoraciones verificadas</h3><p>Toda valoración queda vinculada a una reserva real, lo que impide reseñas fraudulentas. La administración puede moderar.</p></div>
+      <div class="card rv d3"><span class="k">Catálogo</span><h3>Especialidades ampliables</h3><p>Fuerza, movilidad, rendimiento deportivo, preparación física, recuperación, rehabilitación o entrenamiento para un deporte concreto. Se añaden nuevas desde administración sin tocar el código.</p></div>
+    </div>
+    <div class="quote rv d3" style="margin-top:52px">Un gimnasio ofrece los entrenadores que tiene en plantilla.<br><b>NEXO ofrece al que encaja con lo que necesitas.</b></div>
+  </div>
+</section>
+
+<!-- ============ 10 MÉTRICAS ============ -->
+<section id="metricas">
+  <div class="wrap">
+    <div class="chapter rv"><b>10</b><s></s><em>Cómo se mide</em></div>
+    <h2 class="rv d1">El negocio se juzga<br>por <span class="sil">la hora disponible</span></h2>
+    <p class="lead rv d2" style="margin-bottom:40px">Un espacio que se alquila por horas se parece más a un hotel que a un gimnasio: lo que importa no son los socios, sino cuántas de las horas que existen acaban vendidas y a qué precio. Estas métricas se preparan desde el primer día.</p>
+    <div class="grid g3">
+      <div class="metric rv d1"><h3>Ocupación</h3><div class="f">horas reservadas ÷ horas disponibles</div><p>La cifra que decide si un centro funciona. Determina cuántas salas y qué horarios tienen sentido.</p></div>
+      <div class="metric rv d2"><h3>Ingreso por hora disponible</h3><div class="f">ingresos ÷ horas disponibles</div><p>Mide el rendimiento real del activo, incluyendo las horas que se quedan vacías.</p></div>
+      <div class="metric rv d3"><h3>Ingreso por hora reservada</h3><div class="f">ingresos ÷ horas reservadas</div><p>Indica si el precio está bien puesto y cuánto aporta el entrenador a cada reserva.</p></div>
+    </div>
+    <div class="card flat rv d2" style="margin-top:26px">
+      <h3>Utilización por franja horaria</h3>
+      <p style="margin-bottom:4px">Saber qué franjas se llenan y cuáles se vacían es lo que permite decidir después si tiene sentido una tarifa valle, una promoción o un horario reducido. Reparto ilustrativo, pendiente de datos del piloto.</p>
+      <div class="bands" id="bands">
+        <div class="band"><i style="height:34%"></i><s>06–09</s></div>
+        <div class="band"><i style="height:56%"></i><s>09–13</s></div>
+        <div class="band"><i style="height:28%"></i><s>13–16</s></div>
+        <div class="band"><i style="height:100%"></i><s>16–20</s></div>
+        <div class="band"><i style="height:72%"></i><s>20–23</s></div>
+      </div>
+    </div>
+    <p class="sm rv d3" style="margin-top:24px">Junto a estas, el sistema sigue clientes nuevos, activos, recurrentes e inactivos; y por entrenador, sus reservas, horas, clientes captados e ingresos generados.</p>
+  </div>
+</section>
+
+<!-- ============ 11 DIFERENCIACIÓN ============ -->
+<section id="diferencia">
+  <div class="wrap">
+    <div class="chapter rv"><b>11</b><s></s><em>Posicionamiento</em></div>
+    <h2 class="rv d1">Frente a un <span class="sil">gimnasio tradicional</span></h2>
+    <p class="lead rv d2" style="margin-bottom:36px">La comparación no es de precio ni de tamaño. Es de qué se compra exactamente.</p>
+    <div class="tscroll rv d2">
+      <table>
+        <thead><tr><th></th><th>Gimnasio tradicional</th><th>NEXO</th></tr></thead>
+        <tbody>
+          <tr><td>Espacio</td><td data-label="Gimnasio">Compartido con decenas de personas a la vez</td><td data-label="NEXO">La sala completa para una sola reserva</td></tr>
+          <tr><td>Equipamiento</td><td data-label="Gimnasio">Compartido y frecuentemente ocupado</td><td data-label="NEXO">Disponible durante toda la franja reservada</td></tr>
+          <tr><td>Entrenadores</td><td data-label="Gimnasio">Los de la plantilla, con sus especialidades</td><td data-label="NEXO">Independientes, elegidos por especialidad y valoración</td></tr>
+          <tr><td>Entrenador externo</td><td data-label="Gimnasio">Normalmente no puede trabajar allí</td><td data-label="NEXO">Puede reservar y llevar a sus propios clientes</td></tr>
+          <tr><td>Sesión privada</td><td data-label="Gimnasio">Difícil de conseguir en sala común</td><td data-label="NEXO">Es el modo por defecto</td></tr>
+          <tr><td>Acceso</td><td data-label="Gimnasio">Horario de recepción</td><td data-label="NEXO">Autónomo, con código ligado a la reserva</td></tr>
+          <tr><td>Pago</td><td data-label="Gimnasio">Cuota mensual con permanencia habitual</td><td data-label="NEXO">Por uso, sin cuota ni compromiso</td></tr>
+          <tr><td>Inmediatez</td><td data-label="Gimnasio">Vas y esperas turno</td><td data-label="NEXO">Si está libre, reservas y entras</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="quote rv d3" style="margin-top:48px"><b>Espacio privado de entrenamiento bajo demanda.</b><br>Ni un gimnasio, ni un gimnasio con entrenadores.</div>
+  </div>
+</section>
+
+<!-- ============ 12 ESCALA ============ -->
+<section id="escala">
+  <div class="wrap">
+    <div class="chapter rv"><b>12</b><s></s><em>Escalabilidad</em></div>
+    <h2 class="rv d1">La primera sala <span class="sil">es un piloto</span></h2>
+    <p class="lead rv d2">El primer centro será previsiblemente una única sala grande. Pero el modelo de datos contempla desde el principio varios centros, varias salas y un mismo usuario o entrenador operando en todos ellos. Añadir una ubicación no debe obligar a rehacer la aplicación.</p>
+    <div class="grid g2" style="margin-top:44px;align-items:start">
+      <div class="tree rv d1"><b>NEXO</b>
+ └── <em>Centros</em>
+       └── <em>Salas</em>
+             ├── Equipamiento
+             ├── Disponibilidad
+             ├── Acceso
+             └── Cámaras</div>
+      <div class="tree rv d2"><b>NEXO</b>
+ ├── <em>Barcelona</em>
+ │     ├── Barcelona 01
+ │     └── Barcelona 02
+ ├── <em>Madrid</em>
+ │     └── Madrid 01
+ └── <em>Valencia</em>
+       └── Valencia 01</div>
+    </div>
+    <p class="sm rv d3" style="margin-top:26px">La intención es abrir centros propios, no vender el software a gimnasios de terceros. Eso permite centralizar usuarios, reservas, entrenadores, pagos, estadísticas y promociones en un único sistema, y comparar la rentabilidad real de cada ubicación.</p>
+  </div>
+</section>
+
+<!-- ============ 13 ALCANCE ============ -->
+<section id="alcance">
+  <div class="wrap">
+    <div class="chapter rv"><b>13</b><s></s><em>Alcance</em></div>
+    <h2 class="rv d1">Qué se construye ahora<br>y <span class="sil">qué se deja fuera</span></h2>
+    <p class="lead rv d2" style="margin-bottom:40px">La primera versión debe validar el negocio físico, no construir una superaplicación deportiva. Delimitar lo que no se hace es tan importante como decidir lo que sí.</p>
+    <div class="grid g3">
+      <div class="phase now rv d1">
+        <div class="h"><span class="pill ok">Versión inicial</span><b>Lo imprescindible</b></div>
+        <div class="b">
+          <span><i>▸</i>Registro, perfil e inicio de sesión</span>
+          <span><i>▸</i>Reservas, pagos e historial</span>
+          <span><i>▸</i>Cancelación e invitaciones</span>
+          <span><i>▸</i>Acceso digital y notificaciones</span>
+          <span><i>▸</i>Perfil de entrenador y valoraciones</span>
+          <span><i>▸</i>Panel: calendario, usuarios, pagos, promociones</span>
+          <span><i>▸</i>Cerradura inteligente y control de ocupación</span>
+        </div>
+      </div>
+      <div class="phase later rv d2">
+        <div class="h"><span class="pill cold">Después</span><b>Segunda fase</b></div>
+        <div class="b">
+          <span><i>▸</i>Sesiones públicas con plazas sueltas</span>
+          <span><i>▸</i>Bonos y suscripciones</span>
+          <span><i>▸</i>Tarifas dinámicas por franja</span>
+          <span><i>▸</i>Mensajería interna y favoritos</span>
+          <span><i>▸</i>Recomendación de entrenadores</span>
+          <span><i>▸</i>Múltiples salas y centros</span>
+          <span><i>▸</i>Fidelización y analítica avanzada</span>
+        </div>
+      </div>
+      <div class="phase never rv d3">
+        <div class="h"><span class="pill">Descartado</span><b>Fuera del producto</b></div>
+        <div class="b">
+          <span><i>▸</i>Biblioteca de ejercicios y vídeos</span>
+          <span><i>▸</i>Rutinas digitales y registro de pesos</span>
+          <span><i>▸</i>Estadísticas deportivas</span>
+          <span><i>▸</i>Generación de entrenamientos con IA</span>
+          <span><i>▸</i>Medición corporal y seguimiento de peso</span>
+          <span><i>▸</i>Integración compleja con wearables</span>
+        </div>
+      </div>
+    </div>
+    <div class="quote rv d3" style="margin-top:48px">El producto es <b>espacio + reserva + pago + acceso + entrenador.</b><br>El entrenamiento ocurre en la sala, no en la pantalla.</div>
+  </div>
+</section>
+
+<!-- ============ 14 DECISIONES ABIERTAS ============ -->
+<section id="abiertas">
+  <div class="wrap">
+    <div class="chapter rv"><b>14</b><s></s><em>Honestidad</em></div>
+    <h2 class="rv d1">Lo que todavía <span class="sil">está por decidir</span></h2>
+    <p class="lead rv d2">Presentar el modelo sin señalar sus huecos sería presentarlo mal. Estas decisiones no están tomadas, y el sistema se construye para que ninguna de ellas quede fijada en el código.</p>
+    <div class="grid g2" style="margin-top:40px">
+      <div class="card flat rv d1">
+        <span class="pill warn">Negocio</span>
+        <ul class="list tight">
+          <li>Precio exacto de la sala y duraciones</li>
+          <li>Precio por persona frente a precio por reserva</li>
+          <li>Comisión de NEXO al entrenador y reparto de pagos</li>
+          <li>Bonos, suscripciones y tarifas por horario</li>
+          <li>Si se abren o no las sesiones públicas</li>
+          <li>Nombre definitivo de la marca — NEXO es provisional</li>
+        </ul>
+      </div>
+      <div class="card flat rv d2">
+        <span class="pill warn">Infraestructura</span>
+        <ul class="list tight">
+          <li>Proveedor de pagos y de autenticación</li>
+          <li>Hardware de cerradura y control de acceso</li>
+          <li>Proveedor de cámaras</li>
+          <li>Política exacta de conservación de imágenes</li>
+          <li>Proveedores de mapas y notificaciones</li>
+          <li>Mensajería interna entre alumno y entrenador</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CIERRE ============ -->
+<section id="objetivo" class="close">
+  <div class="wrap">
+    <div class="chapter rv" style="justify-content:center"><b>15</b><s style="max-width:60px"></s><em>Objetivo final</em></div>
+    <div class="big rv d1">El objetivo no es crear una aplicación.<br>Es crear el <b>sistema operativo</b> de una red de espacios privados de entrenamiento.</div>
+    <p class="sm rv d2" style="margin:30px auto 0;text-align:center">La primera ubicación sirve como prueba del modelo. Si funciona, el mismo sistema debe permitir abrir nuevas ubicaciones, añadir salas, gestionar varias ciudades, centralizar pagos y analizar la rentabilidad de cada centro por separado.</p>
+    <a class="cta rv d3" href="index.html">Ver la app <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <span>NEXO · Documento interno · Marca provisional</span>
+  <span>Presentación del modelo de negocio</span>
+</footer>
+
+<script>
+const $=(s,c)=>(c||document).querySelector(s);
+const $$=(s,c)=>Array.from((c||document).querySelectorAll(s));
+
+/* ---------- Modo ligero: mismo criterio que la demo ---------- */
+(function lite(){
+  if(/[?&]lite\b/.test(location.search) || matchMedia('(prefers-reduced-motion:reduce)').matches){
+    document.body.classList.add('lite'); return;
+  }
+  function visible(){
+    if(!document.hidden) return Promise.resolve();
+    return new Promise(res=>document.addEventListener('visibilitychange',function h(){
+      if(!document.hidden){document.removeEventListener('visibilitychange',h);res();}
+    }));
+  }
+  function measure(){
+    return new Promise(res=>{
+      let n=0,fiable=true;const t0=performance.now();
+      const onHide=()=>{if(document.hidden)fiable=false};
+      document.addEventListener('visibilitychange',onHide);
+      (function f(){
+        n++;const ms=performance.now()-t0;
+        if(ms<1800) return requestAnimationFrame(f);
+        document.removeEventListener('visibilitychange',onHide);
+        res(fiable? n/(ms/1000):null);
+      })();
+    });
+  }
+  (async function probe(){
+    await visible();
+    const a=await measure(); if(a===null) return probe();
+    if(a>=45) return;
+    const b=await measure(); if(b===null) return probe();
+    if(b<45) document.body.classList.add('lite');
+  })();
+})();
+
+/* ---------- Portada: letras ---------- */
+(function(){
+  const m=$('#coverMark');
+  'NEXO'.split('').forEach((ch,i)=>{
+    const s=document.createElement('span');
+    s.textContent=ch; s.style.animationDelay=(.1+i*.12)+'s';
+    m.appendChild(s);
+  });
+})();
+
+/* ---------- Raíl de capítulos ---------- */
+const CAPS=[
+  ['portada','Portada'],['problema','El problema'],['que-es','La propuesta'],
+  ['como','La experiencia'],['principios','Principios'],['roles','Los tres lados'],
+  ['economia','Economía'],['reglas','Reglas'],['acceso','Operación'],
+  ['marketplace','Marketplace'],['metricas','Métricas'],['diferencia','Posicionamiento'],
+  ['escala','Escalabilidad'],['alcance','Alcance'],['abiertas','Abiertas'],['objetivo','Objetivo']
+];
+(function(){
+  const r=$('#rail');
+  CAPS.forEach(([id,label])=>{
+    const a=document.createElement('a');
+    a.href='#'+id; a.dataset.id=id;
+    a.innerHTML='<i></i><span>'+label+'</span>';
+    r.appendChild(a);
+  });
+})();
+
+/* ---------- Revelado al entrar en pantalla ---------- */
+(function(){
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } });
+  },{rootMargin:'0px 0px -12% 0px',threshold:.12});
+  $$('.rv').forEach(el=>io.observe(el));
+
+  // las barras de franja horaria crecen al entrar
+  const bio=new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('on'); bio.unobserve(e.target); } });
+  },{threshold:.35});
+  const b=$('#bands'); if(b) bio.observe(b);
+})();
+
+/* ---------- Capítulo activo ---------- */
+(function(){
+  const links=$$('#rail a');
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting) return;
+      links.forEach(a=>a.classList.toggle('act', a.dataset.id===e.target.id));
+    });
+  },{rootMargin:'-45% 0px -45% 0px'});
+  CAPS.forEach(([id])=>{ const s=document.getElementById(id); if(s) io.observe(s); });
+})();
+
+/* ---------- Barra de progreso (una actualización por fotograma) ---------- */
+(function(){
+  const bar=$('#progBar'); let queued=false;
+  function upd(){
+    queued=false;
+    const h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.transform='scaleX('+(h>0? Math.min(scrollY/h,1):0)+')';
+  }
+  addEventListener('scroll',()=>{ if(!queued){ queued=true; requestAnimationFrame(upd); } },{passive:true});
+  addEventListener('resize',upd); upd();
+})();
+</script>
+</body>
+</html>

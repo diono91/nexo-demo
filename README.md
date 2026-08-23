@@ -1,10 +1,13 @@
-# NEXO — Demo de producto
+# NEXO
 
-Demo visual navegable de NEXO: red de salas privadas y equipadas para
-entrenamiento funcional, reservables por horas desde la app, con acceso
-autónomo y marketplace opcional de entrenadores independientes.
+Dos páginas, un único archivo cada una. Sin dependencias, sin instalación.
 
-Es una demo **no funcional**: no hay backend, pagos ni base de datos.
-Todos los datos (entrenadores, precios, horarios) son ficticios.
+- **`index.html`** — Demo visual navegable de la app móvil: inicio, flujo de
+  reserva en cuatro pasos, marketplace de entrenadores, historial, perfil y
+  acceso a sala. Es una demo **no funcional**: no hay backend, pagos ni base
+  de datos, y los datos son ficticios.
+- **`negocio.html`** — Presentación del modelo de negocio en dieciséis
+  capítulos que se recorren deslizando.
 
-**Abrir:** `index.html` — un único archivo, sin dependencias ni instalación.
+Ambas se enlazan entre sí. Añade `?lite` a la URL para desactivar los efectos
+de movimiento en equipos lentos.
