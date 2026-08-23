@@ -937,15 +937,36 @@ const $$ = (s,c)=> Array.from((c||document).querySelectorAll(s));
   if(btn) btn.addEventListener('click',()=>set(!document.body.classList.contains('lite')));
   if(forced){ set(true); return; }
 
-  // medir fps durante 2 s una vez terminado el arranque
-  setTimeout(()=>{
-    let n=0; const t0=performance.now();
-    (function f(){
-      n++;
-      if(performance.now()-t0 < 2000) requestAnimationFrame(f);
-      else if(n/((performance.now()-t0)/1000) < 45) set(true);
-    })();
-  },3200);
+  // Medir fps. El navegador limita las pestañas de fondo a ~1 fps, así que
+  // una medición hecha con la página oculta no vale: se descarta y se repite.
+  function visible(){
+    if(!document.hidden) return Promise.resolve();
+    return new Promise(res=>document.addEventListener('visibilitychange',function h(){
+      if(!document.hidden){ document.removeEventListener('visibilitychange',h); res(); }
+    }));
+  }
+  function measure(){
+    return new Promise(res=>{
+      let n=0, fiable=true; const t0=performance.now();
+      const onHide=()=>{ if(document.hidden) fiable=false; };
+      document.addEventListener('visibilitychange',onHide);
+      (function f(){
+        n++;
+        const ms=performance.now()-t0;
+        if(ms<1800) return requestAnimationFrame(f);
+        document.removeEventListener('visibilitychange',onHide);
+        res(fiable ? n/(ms/1000) : null);
+      })();
+    });
+  }
+  async function probe(){
+    await visible();
+    const a=await measure(); if(a===null) return probe();
+    if(a>=45) return;                       // va bien: no tocar nada
+    const b=await measure(); if(b===null) return probe();
+    if(b<45) set(true);                     // dos medidas malas seguidas
+  }
+  setTimeout(probe,3200);
 })();
 
 // Reloj
