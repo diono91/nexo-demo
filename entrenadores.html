@@ -6,320 +6,384 @@
 <title>NEXO para entrenadores</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   NEXO — Landing para entrenadores independientes
-   Misma sala y misma luz; estructura de página comercial.
+   NEXO — Landing para entrenadores
+   Dirección: loft neoyorquino de día. Nave blanca, ventanales
+   de acero negro, hormigón claro y luz natural entrando.
    ============================================================ */
 
 :root{
-  --bg:#040406;
-  --line:rgba(255,255,255,.085);
-  --line-strong:rgba(255,255,255,.17);
-  --txt:#eef0f4;
-  --dim:#8d939e;
-  --dim-2:#5d636e;
-  --cold:#cfe0ff;
-  --ok:#8ef0c0;
-  --warn:#ffd9a0;
-  --silver:linear-gradient(160deg,#ffffff 0%,#c9ced8 22%,#7e848f 46%,#e9edf3 62%,#9aa0ab 82%,#f4f6fa 100%);
+  --paper:#F4F2EE;        /* cal / yeso */
+  --concrete:#E2DFD8;     /* hormigón claro */
+  --steel:#22242B;        /* carpintería negra */
+  --ink:#16181C;          /* texto */
+  --ink-2:#5B6169;        /* texto secundario */
+  --ink-3:#8B9199;        /* etiquetas */
+  --green:#1F6F5C;        /* acento */
+  --green-d:#175443;      /* acento pulsado */
+  --green-l:#E4EFEB;      /* acento suave */
+  --sky:#DFE9EE;          /* cristal */
+  --line:rgba(22,24,28,.14);
+  --line-2:rgba(22,24,28,.28);
   --ease:cubic-bezier(.16,1,.3,1);
-  --pad:clamp(22px,6vw,120px);
-  --navh:60px;
+  --pad:clamp(20px,5.5vw,110px);
+  --navh:64px;
 }
-@media (max-width:900px){ :root{ --navh:52px } }
+@media (max-width:900px){ :root{ --navh:56px } }
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  background:var(--bg);color:var(--txt);
-  font-family:'Inter Tight','Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
-  font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background:var(--paper);color:var(--ink);
+  font-family:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
-::selection{background:rgba(207,224,255,.25)}
+::selection{background:rgba(31,111,92,.18)}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--cold);outline-offset:3px;border-radius:6px}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px}
 
-/* ---------- LA SALA ---------- */
-.stage{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-.room{position:absolute;inset:0;
+/* ============ LA NAVE DE DÍA ============ */
+.scene{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.room{
+  position:absolute;inset:0;
   background:
-    radial-gradient(120% 70% at 50% -8%, rgba(190,215,255,.09) 0%, transparent 55%),
-    radial-gradient(70% 50% at 12% 26%, rgba(255,255,255,.042) 0%, transparent 60%),
-    radial-gradient(70% 50% at 88% 66%, rgba(255,255,255,.035) 0%, transparent 60%),
-    linear-gradient(180deg,#07080b 0%,#040406 50%,#020203 100%);
+    radial-gradient(80% 60% at 8% 12%, rgba(255,255,255,.95) 0%, transparent 58%),
+    radial-gradient(70% 55% at 92% 30%, rgba(255,255,255,.85) 0%, transparent 60%),
+    linear-gradient(180deg,#FAF8F5 0%,var(--paper) 42%,#EBE8E2 100%);
 }
-.beam{position:absolute;top:-14vh;width:32vw;height:128vh;
-  background:linear-gradient(180deg,rgba(255,255,255,.16) 0%,rgba(216,232,255,.07) 20%,rgba(190,215,255,.028) 46%,transparent 78%);
-  clip-path:polygon(41% 0%,59% 0%,100% 100%,0% 100%);
-  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 26%,#000 74%,transparent 100%);
-          mask-image:linear-gradient(90deg,transparent 0%,#000 26%,#000 74%,transparent 100%);
-  transform-origin:50% 0%;will-change:transform;backface-visibility:hidden;
+/* textura de yeso, muy leve */
+.plasterTex{
+  position:absolute;inset:0;opacity:.45;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='4'/><feColorMatrix type='saturate' values='0'/></filter><rect width='200' height='200' filter='url(%23p)' opacity='.15'/></svg>");
 }
-.beam.b1{left:-5vw;animation:sway1 19s ease-in-out infinite}
-.beam.b2{left:34vw;animation:sway2 23s ease-in-out infinite;opacity:.7}
-.beam.b3{right:-7vw;animation:sway3 21s ease-in-out infinite}
-@keyframes sway1{0%,100%{transform:rotate(7deg)}50%{transform:rotate(12deg)}}
-@keyframes sway2{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
-@keyframes sway3{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(-13deg)}}
-.lamp{position:absolute;top:-2px;width:120px;height:4px;border-radius:0 0 40px 40px;
-  background:linear-gradient(180deg,#fff,#cfe0ff 60%,rgba(207,224,255,0));
-  box-shadow:0 0 36px 10px rgba(207,224,255,.42),0 0 110px 26px rgba(160,190,255,.16)}
-.lamp.l1{left:7vw}.lamp.l2{left:calc(50vw - 60px)}.lamp.l3{right:7vw}
-.grain{position:absolute;inset:0;opacity:.028;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");}
-.vig{position:absolute;inset:0;background:radial-gradient(120% 85% at 50% 45%,transparent 42%,rgba(0,0,0,.7) 100%)}
 
-/* ---------- NAVEGACIÓN (compartida) ---------- */
+/* ventanales de acero */
+.wins{position:absolute;inset:0;will-change:transform}
+.win{
+  position:absolute;background-color:var(--steel);
+  display:grid;gap:6px;padding:8px;
+  box-shadow:0 0 0 1px rgba(22,24,28,.5), 0 26px 70px rgba(22,24,28,.09);
+}
+.win i{display:block;background:linear-gradient(158deg,#FBFDFE 0%,var(--sky) 55%,#CFDDE4 100%)}
+.win.w1{left:-6%;top:6%;width:30%;height:62%;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(5,1fr);opacity:.5}
+.win.w2{right:-8%;top:22%;width:26%;height:52%;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);opacity:.36}
+@media (max-width:900px){
+  .win.w1{left:-24%;top:4%;width:58%;height:38%;opacity:.28}
+  .win.w2{right:-28%;top:46%;width:54%;height:32%;opacity:.2}
+}
+
+/* haces de luz que cruzan la nave */
+.shaft{
+  position:absolute;top:-30%;width:44vw;height:150vh;transform-origin:50% 0;
+  background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(255,255,255,.55) 34%,rgba(255,255,255,0) 78%);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 32%,#000 68%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 32%,#000 68%,transparent);
+  clip-path:polygon(30% 0%,70% 0%,100% 100%,0% 100%);
+  will-change:transform;backface-visibility:hidden;
+}
+.shaft.s1{left:-4%;animation:drift-a 22s ease-in-out infinite}
+.shaft.s2{left:26%;animation:drift-b 27s ease-in-out infinite;opacity:.7}
+.shaft.s3{right:-6%;animation:drift-a 25s ease-in-out infinite reverse;opacity:.8}
+@keyframes drift-a{0%,100%{transform:rotate(11deg) translateX(0)}50%{transform:rotate(15deg) translateX(2vw)}}
+@keyframes drift-b{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(2deg)}}
+
+#motes{position:absolute;inset:0;width:100%;height:100%;opacity:.5}
+.floorline{position:absolute;left:0;right:0;bottom:0;height:22%;
+  background:linear-gradient(180deg,transparent,rgba(200,196,188,.4))}
+
+/* ============ NAVEGACIÓN ============ */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:200;height:var(--navh);
   display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:0 clamp(14px,4vw,64px);
-  background:linear-gradient(180deg,rgba(4,4,6,.94),rgba(4,4,6,.72) 70%,transparent);
+  padding:0 var(--pad);
+  background:rgba(244,242,238,.92);
+  border-bottom:1px solid var(--line);
 }
-.nav-mark{font-size:13px;font-weight:800;letter-spacing:.3em;text-indent:.3em;flex:0 0 auto;
-  background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
-.nav-links{display:flex;gap:4px;align-items:center}
-.nav-links a,.nav-links span{
-  font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;white-space:nowrap;
-  color:var(--dim-2);padding:9px 14px;border-radius:100px;border:1px solid transparent;transition:.35s var(--ease);
+.nav-mark{font-size:19px;font-weight:800;letter-spacing:.2em;text-indent:.2em;color:var(--ink);flex:0 0 auto;line-height:1}
+.nav-mark b{color:var(--green);font-weight:800}
+.nav-links{display:flex;gap:3px;align-items:center}
+.nav-links>a,.nav-links>span{
+  font-family:'Roboto Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;text-decoration:none;white-space:nowrap;color:var(--ink-2);
+  padding:9px 14px;border:1px solid transparent;transition:.3s var(--ease);
 }
-.nav-links a:hover{color:var(--txt);background:rgba(255,255,255,.05)}
-.nav-links .act{color:var(--txt);border-color:var(--line-strong);background:rgba(255,255,255,.05)}
+.nav-links>a:hover{color:var(--ink);background:rgba(22,24,28,.05)}
+.nav-links>.act{color:#fff;background:var(--green);border-color:var(--green)}
 .nav-links .short{display:none}
-@media (max-width:760px){
-  .nav-links a,.nav-links span{font-size:9px;padding:8px 10px;letter-spacing:.12em}
+@media (max-width:780px){
+  .nav-links>a,.nav-links>span{font-size:9px;padding:8px 10px;letter-spacing:.09em}
   .nav-links .full{display:none}
   .nav-links .short{display:inline}
+  .nav-mark{font-size:16px}
 }
-@media (max-width:400px){ .nav-mark{display:none} }
+@media (max-width:380px){ .nav-mark{display:none} }
 
-/* ---------- ESTRUCTURA ---------- */
+.tape{position:fixed;top:0;left:0;right:0;height:2px;z-index:201}
+.tape i{display:block;height:100%;width:100%;transform:scaleX(0);transform-origin:0 50%;
+  background:var(--green);will-change:transform}
+
+/* ============ TIPOGRAFÍA ============ */
 main{position:relative;z-index:10}
-section{padding:clamp(76px,11vh,150px) var(--pad);position:relative}
-.wrap{max-width:1140px;margin:0 auto}
+section{padding:clamp(72px,10vh,138px) var(--pad);position:relative}
+.wrap{max-width:1160px;margin:0 auto}
 
-.eyebrow{
-  display:inline-flex;align-items:center;gap:9px;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--cold);border:1px solid rgba(207,224,255,.28);background:rgba(207,224,255,.06);
-  padding:7px 14px;border-radius:100px;margin-bottom:26px;
+h2{font-size:clamp(33px,5vw,62px);font-weight:800;letter-spacing:-.035em;line-height:1;
+  margin-bottom:22px;text-wrap:balance;color:var(--ink)}
+h2 em{font-style:normal;color:var(--green)}
+h3{font-size:clamp(18px,2vw,22px);font-weight:700;letter-spacing:-.02em;line-height:1.2;color:var(--ink)}
+
+.tag{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:'Roboto Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--green);background:var(--green-l);border:1px solid rgba(31,111,92,.22);
+  padding:8px 14px;margin-bottom:22px;
 }
-.eyebrow i{width:5px;height:5px;border-radius:50%;background:var(--cold);box-shadow:0 0 9px var(--cold)}
+.tag i{width:6px;height:6px;border-radius:50%;background:var(--green);flex:0 0 auto}
 
-h2{font-size:clamp(29px,4.6vw,54px);font-weight:700;letter-spacing:-.035em;line-height:1.05;text-wrap:balance;margin-bottom:22px}
-h2 .sil{background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
-h3{font-size:clamp(16.5px,2vw,21px);font-weight:600;letter-spacing:-.015em;line-height:1.28}
-.lead{font-size:clamp(15.5px,1.6vw,19px);line-height:1.72;color:#c2c7d0;max-width:60ch;font-weight:300}
-p.sm{font-size:14px;line-height:1.75;color:var(--dim);max-width:66ch}
-.note{font-size:11.5px;line-height:1.7;color:var(--dim-2);max-width:60ch}
+.lead{font-size:clamp(16px,1.55vw,19px);line-height:1.7;color:var(--ink-2);max-width:58ch}
+p.sm{font-size:15px;line-height:1.72;color:var(--ink-2);max-width:64ch}
+.note{font-family:'Roboto Mono',monospace;font-size:11px;line-height:1.75;color:var(--ink-3);max-width:58ch}
 
-/* ---------- HERO ---------- */
-.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:calc(var(--navh) + 40px)}
-.hero h1{
-  font-size:clamp(42px,8.4vw,104px);font-weight:800;letter-spacing:-.045em;line-height:.94;
-  text-wrap:balance;max-width:13ch;
+/* ============ PORTADA ============ */
+.cover{min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  padding-top:calc(var(--navh) + 30px);padding-bottom:38px}
+.cover-grid{display:grid;grid-template-columns:1.38fr .62fr;gap:clamp(24px,4vw,60px);align-items:end}
+@media (max-width:980px){.cover-grid{grid-template-columns:1fr;align-items:start}}
+
+.cover h1{font-size:clamp(50px,10.6vw,142px);font-weight:800;letter-spacing:-.05em;line-height:.9;color:var(--ink)}
+.cover h1 .ln{display:block;overflow:hidden}
+.cover h1 .ln>span{display:block;white-space:nowrap;transform:translateY(104%);animation:riseIn 1.05s var(--ease) forwards}
+.cover h1 .ln:nth-child(2)>span{animation-delay:.13s;color:var(--green)}
+@keyframes riseIn{to{transform:none}}
+
+.cover .say{margin-top:24px;font-size:clamp(16.5px,1.7vw,20px);line-height:1.6;color:var(--ink-2);max-width:46ch}
+.cover .say b{color:var(--ink);font-weight:600}
+
+.hardfacts{display:flex;flex-wrap:wrap;margin-top:28px;
+  background:#fff;border:1px solid var(--line);box-shadow:0 14px 40px rgba(22,24,28,.07)}
+.hardfacts div{flex:1 1 130px;padding:16px 18px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:5px}
+.hardfacts div:last-child{border-right:0}
+.hardfacts b{font-size:29px;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--green)}
+.hardfacts s{text-decoration:none;font-family:'Roboto Mono',monospace;font-size:9px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3)}
+@media (max-width:520px){
+  .hardfacts div{flex:1 1 45%;border-bottom:1px solid var(--line)}
+  .hardfacts div:nth-child(2n){border-right:0}
+  .hardfacts div:nth-last-child(-n+2){border-bottom:0}
 }
-.hero h1 .sil{background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 0 34px rgba(200,225,255,.18))}
-.hero .sub{margin-top:28px;font-size:clamp(16px,1.9vw,21px);line-height:1.65;color:#c2c7d0;max-width:48ch;font-weight:300}
-.hero-cta{display:flex;gap:11px;flex-wrap:wrap;margin-top:40px}
-.hero-facts{display:flex;gap:30px;flex-wrap:wrap;margin-top:48px;padding-top:26px;border-top:1px solid var(--line)}
-.hero-facts div{display:flex;flex-direction:column;gap:6px}
-.hero-facts b{font-size:20px;font-weight:600;background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero-facts s{text-decoration:none;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim-2)}
 
+.cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+
+.ticket{background:#fff;border:1px solid var(--line);padding:22px;box-shadow:0 18px 50px rgba(22,24,28,.09)}
+.ticket .h{font-family:'Roboto Mono',monospace;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-3);padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--line)}
+.ticket .row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;font-size:13.5px;color:var(--ink-2)}
+.ticket .row b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.ticket .row.big{padding-top:13px;margin-top:8px;border-top:1px solid var(--line)}
+.ticket .row.big b{font-size:28px;font-weight:800;letter-spacing:-.03em;color:var(--green);line-height:1}
+
+.scroll-cue{margin-top:26px;display:flex;align-items:center;gap:11px;
+  font-family:'Roboto Mono',monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3)}
+.scroll-cue i{display:block;width:2px;height:30px;background:var(--green);animation:cue 2.2s var(--ease) infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:50% 0}45%{transform:scaleY(1);transform-origin:50% 0}
+  55%{transform:scaleY(1);transform-origin:50% 100%}100%{transform:scaleY(0);transform-origin:50% 100%}}
+
+/* ============ BOTONES ============ */
 .btn{
-  display:inline-flex;align-items:center;gap:11px;text-decoration:none;border:0;cursor:pointer;
-  padding:17px 30px;border-radius:100px;font:inherit;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
-  color:#07080a;background:linear-gradient(150deg,#ffffff,#d3d8e0 46%,#ffffff);
-  box-shadow:0 12px 34px rgba(180,205,255,.2);transition:transform .35s var(--ease),box-shadow .35s var(--ease);
+  display:inline-flex;align-items:center;gap:10px;text-decoration:none;border:1px solid var(--green);cursor:pointer;
+  font-family:'Roboto Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  padding:16px 26px;color:#fff;background:var(--green);
+  transition:transform .3s var(--ease),background .3s var(--ease),box-shadow .3s var(--ease);
+  box-shadow:0 10px 26px rgba(31,111,92,.22);
 }
-.btn:hover{transform:translateY(-2px);box-shadow:0 18px 44px rgba(180,205,255,.3)}
-.btn svg{width:15px;height:15px;stroke:#07080a;fill:none;stroke-width:2}
-.btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line-strong);box-shadow:none}
-.btn.ghost:hover{background:rgba(255,255,255,.05)}
-.btn.ghost svg{stroke:var(--txt)}
+.btn:hover{background:var(--green-d);transform:translateY(-2px);box-shadow:0 16px 34px rgba(31,111,92,.28)}
+.btn:active{transform:translateY(0)}
+.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-2);box-shadow:none}
+.btn.ghost:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
-/* ---------- REJILLAS ---------- */
-.grid{display:grid;gap:14px}
+/* ============ CINTA ============ */
+.marquee{position:relative;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:#fff;padding:14px 0}
+.marquee-in{display:flex;width:max-content;animation:roll 38s linear infinite;will-change:transform}
+.marquee span{font-size:17px;font-weight:600;letter-spacing:-.01em;color:var(--ink-2);
+  padding:0 22px;white-space:nowrap;display:flex;align-items:center;gap:22px}
+.marquee span i{width:7px;height:7px;background:var(--green);transform:rotate(45deg);flex:0 0 auto}
+@keyframes roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ============ TARJETAS ============ */
+.grid{display:grid;gap:16px}
 .g2{grid-template-columns:repeat(2,1fr)}
 .g3{grid-template-columns:repeat(3,1fr)}
-.g4{grid-template-columns:repeat(4,1fr)}
-@media (max-width:1000px){.g4{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr}}
+@media (max-width:860px){.g2,.g3{grid-template-columns:1fr}}
 
-.card{
-  border:1px solid var(--line);border-radius:17px;padding:clamp(18px,2.2vw,26px);
-  background:linear-gradient(158deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
-  display:flex;flex-direction:column;gap:12px;
-  transition:border-color .45s var(--ease),transform .45s var(--ease);
-}
-.card:hover{border-color:var(--line-strong);transform:translateY(-3px)}
-.card p{font-size:13.5px;line-height:1.7;color:var(--dim)}
-.card .k{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cold);letter-spacing:.08em}
+.card{background:#fff;border:1px solid var(--line);padding:clamp(20px,2.4vw,30px);
+  display:flex;flex-direction:column;gap:13px;box-shadow:0 10px 30px rgba(22,24,28,.05);
+  transition:transform .4s var(--ease),box-shadow .4s var(--ease),border-color .4s var(--ease)}
+.card:hover{transform:translateY(-4px);box-shadow:0 22px 50px rgba(22,24,28,.10);border-color:var(--line-2)}
+.card .k{font-family:'Roboto Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--green)}
+.card p{font-size:14.5px;line-height:1.7;color:var(--ink-2)}
 
 .list{display:flex;flex-direction:column;gap:10px}
-.list li{list-style:none;display:flex;gap:11px;font-size:13.5px;line-height:1.58;color:var(--dim)}
-.list li::before{content:"";flex:0 0 auto;width:5px;height:5px;border-radius:50%;background:var(--cold);margin-top:7px;opacity:.75}
+.list li{list-style:none;display:flex;gap:11px;font-size:14.5px;line-height:1.6;color:var(--ink-2)}
+.list li::before{content:"";flex:0 0 auto;width:7px;height:7px;background:var(--green);transform:rotate(45deg);margin-top:7px}
 
-/* ---------- PASOS ---------- */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;counter-reset:s}
-@media (max-width:760px){.steps{grid-template-columns:1fr}}
-.stp{
-  border:1px solid var(--line);border-radius:17px;padding:26px;position:relative;overflow:hidden;
-  background:linear-gradient(158deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
-  display:flex;flex-direction:column;gap:12px;
-}
-.stp::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(207,224,255,.5),transparent)}
-.stp .n{font-family:'JetBrains Mono',monospace;font-size:32px;color:rgba(255,255,255,.14);line-height:1}
-.stp p{font-size:13.5px;line-height:1.7;color:var(--dim)}
+/* pasos */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:860px){.steps{grid-template-columns:1fr}}
+.stp{background:#fff;border:1px solid var(--line);padding:clamp(22px,2.6vw,32px);
+  display:flex;flex-direction:column;gap:13px;position:relative;box-shadow:0 10px 30px rgba(22,24,28,.05);
+  transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+.stp:hover{transform:translateY(-4px);box-shadow:0 22px 50px rgba(22,24,28,.10)}
+.stp::before{content:"";position:absolute;top:0;left:0;width:44px;height:3px;background:var(--green)}
+.stp .n{font-family:'Roboto Mono',monospace;font-size:12px;letter-spacing:.2em;color:var(--ink-3)}
+.stp p{font-size:14.5px;line-height:1.7;color:var(--ink-2)}
 
-/* ---------- DOS MODOS ---------- */
-.mode{
-  border:1px solid var(--line);border-radius:20px;padding:clamp(22px,2.8vw,34px);
-  background:linear-gradient(158deg,rgba(255,255,255,.05),rgba(255,255,255,.012));
-  display:flex;flex-direction:column;gap:16px;
-}
-.mode.hot{border-color:var(--line-strong);background:linear-gradient(158deg,rgba(207,224,255,.11),rgba(255,255,255,.015))}
-.pill{display:inline-flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;
-  padding:6px 12px;border-radius:100px;border:1px solid var(--line-strong);color:var(--dim);width:fit-content}
-.pill.cold{color:var(--cold);border-color:rgba(207,224,255,.3);background:rgba(207,224,255,.06)}
-.pill.ok{color:var(--ok);border-color:rgba(142,240,192,.3);background:rgba(142,240,192,.06)}
+/* modos */
+.mode{background:#fff;border:1px solid var(--line);padding:clamp(22px,2.8vw,36px);
+  display:flex;flex-direction:column;gap:16px;box-shadow:0 10px 30px rgba(22,24,28,.05)}
+.mode.hot{background:var(--green);border-color:var(--green);box-shadow:0 20px 48px rgba(31,111,92,.24)}
+.mode.hot h3{color:#fff}
+.mode.hot .sm{color:rgba(255,255,255,.87)}
+.mode.hot .list li{color:rgba(255,255,255,.9)}
+.mode.hot .list li::before{background:#fff}
+.pill{display:inline-flex;align-items:center;gap:8px;width:fit-content;
+  font-family:'Roboto Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+  padding:7px 12px;border:1px solid var(--line-2);color:var(--ink-2)}
+.pill.on{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.14)}
 
-/* ---------- EQUIPAMIENTO ---------- */
+/* equipamiento */
 .kit{display:flex;flex-wrap:wrap;gap:8px}
-.kit span{
-  font-size:12.5px;color:var(--dim);border:1px solid var(--line);padding:11px 16px;border-radius:100px;
-  background:rgba(255,255,255,.025);transition:.35s var(--ease);
-}
-.kit span:hover{color:var(--txt);border-color:var(--line-strong);transform:translateY(-2px)}
+.kit span{font-family:'Roboto Mono',monospace;font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--ink-2);border:1px solid var(--line);padding:11px 15px;background:#fff;transition:.3s var(--ease)}
+.kit span:hover{color:var(--green);border-color:var(--green);transform:translateY(-2px)}
 
-.specs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
-@media (max-width:760px){.specs{grid-template-columns:repeat(2,1fr)}}
-.spec{border:1px solid var(--line);border-radius:14px;padding:18px;background:rgba(255,255,255,.025);text-align:center}
-.spec b{display:block;font-size:22px;font-weight:700;letter-spacing:-.02em;
-  background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
-.spec s{display:block;text-decoration:none;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim-2);margin-top:7px}
+.specs{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:24px}
+@media (max-width:700px){.specs{grid-template-columns:repeat(2,1fr)}}
+.spec{background:#fff;border:1px solid var(--line);padding:20px;text-align:center;box-shadow:0 10px 30px rgba(22,24,28,.05)}
+.spec b{display:block;font-size:34px;font-weight:800;letter-spacing:-.04em;line-height:1;color:var(--green)}
+.spec s{display:block;text-decoration:none;font-family:'Roboto Mono',monospace;font-size:9px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3);margin-top:9px}
 
-/* ---------- DINERO ---------- */
-.money{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.022)}
-.money-row{display:flex;justify-content:space-between;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);font-size:14px}
-.money-row span:first-child{color:var(--dim)}
-.money-row b{font-weight:600;font-variant-numeric:tabular-nums}
-.money-row.you{background:rgba(142,240,192,.07)}
-.money-row.you b{color:var(--ok)}
-.money-row.total{background:rgba(255,255,255,.05);border-bottom:0;font-size:15px}
-.money-row.total span:first-child{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--txt);align-self:center}
+/* dinero */
+.money{background:#fff;border:1px solid var(--line);box-shadow:0 10px 30px rgba(22,24,28,.05)}
+.money-row{display:flex;justify-content:space-between;gap:14px;padding:16px 20px;
+  border-bottom:1px solid var(--line);font-size:14.5px;color:var(--ink-2)}
+.money-row b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.money-row.you{background:var(--green-l)}
+.money-row.you b{color:var(--green)}
+.money-row.total{background:var(--ink);border-bottom:0}
+.money-row.total span:first-child{font-family:'Roboto Mono',monospace;font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(255,255,255,.72);align-self:center}
+.money-row.total b{font-size:27px;font-weight:800;letter-spacing:-.03em;color:#fff;line-height:1}
 
-/* ---------- FICHA DE PERFIL ---------- */
-.profile-mock{
-  border:1px solid var(--line-strong);border-radius:20px;padding:24px;
-  background:linear-gradient(158deg,rgba(255,255,255,.07),rgba(255,255,255,.015));
-  box-shadow:0 24px 60px rgba(0,0,0,.55);display:flex;flex-direction:column;gap:16px;
-}
-.pm-top{display:flex;align-items:center;gap:14px}
-.pm-av{width:56px;height:56px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;
-  font-size:18px;font-weight:700;color:#0a0b0e;background:linear-gradient(150deg,#fff,#a8aebb);
-  box-shadow:0 0 0 1px rgba(255,255,255,.18),0 0 28px rgba(190,215,255,.28)}
-.pm-top .n{font-size:18px;font-weight:600;letter-spacing:-.015em}
-.pm-top .s{font-size:11px;color:var(--dim-2);letter-spacing:.08em;text-transform:uppercase;margin-top:5px}
-.pm-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.pm-stats div{border:1px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center;background:rgba(255,255,255,.03)}
-.pm-stats b{display:block;font-size:16px;font-weight:700;
-  background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
-.pm-stats s{display:block;text-decoration:none;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim-2);margin-top:5px}
-.pm-tags{display:flex;flex-wrap:wrap;gap:7px}
-.pm-tags i{font-style:normal;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
-  border:1px solid var(--line);padding:7px 12px;border-radius:100px;background:rgba(255,255,255,.02)}
+/* ficha de perfil */
+.profile-mock{background:#fff;border:1px solid var(--line);padding:26px;
+  box-shadow:0 24px 60px rgba(22,24,28,.11);display:flex;flex-direction:column;gap:18px}
+.pm-top{display:flex;align-items:center;gap:15px}
+.pm-av{width:58px;height:58px;flex:0 0 auto;display:grid;place-items:center;border-radius:50%;
+  font-size:19px;font-weight:800;letter-spacing:-.02em;color:#fff;background:var(--green)}
+.pm-top .n{font-size:22px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
+.pm-top .s{font-family:'Roboto Mono',monospace;font-size:10px;color:var(--ink-3);letter-spacing:.12em;
+  text-transform:uppercase;margin-top:6px}
+.pm-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
+.pm-stats div{background:#fff;padding:13px 8px;text-align:center}
+.pm-stats b{display:block;font-size:21px;font-weight:800;letter-spacing:-.03em;color:var(--green);line-height:1}
+.pm-stats s{display:block;text-decoration:none;font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3);margin-top:7px}
+.pm-tags{display:flex;flex-wrap:wrap;gap:6px}
+.pm-tags i{font-style:normal;font-family:'Roboto Mono',monospace;font-size:9.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-2);border:1px solid var(--line);padding:7px 11px}
 .pm-price{display:flex;justify-content:space-between;align-items:center;padding-top:15px;border-top:1px solid var(--line)}
-.pm-price .l{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim-2)}
-.pm-price .v{font-size:19px;font-weight:600}
-.pm-price .v em{font-style:normal;font-size:12px;color:var(--dim-2);font-weight:400}
+.pm-price .l{font-family:'Roboto Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.pm-price .v{font-size:28px;font-weight:800;letter-spacing:-.035em;color:var(--ink);line-height:1}
+.pm-price .v em{font-style:normal;font-size:13px;color:var(--ink-3);font-family:'Roboto Mono',monospace;font-weight:400}
 
-/* ---------- FAQ ---------- */
-.faq{border-top:1px solid var(--line)}
+/* FAQ */
+.faq{border-top:1px solid var(--line-2)}
 .faq details{border-bottom:1px solid var(--line)}
-.faq summary{
-  padding:22px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:20px;align-items:flex-start;
-  font-size:clamp(15px,1.8vw,18px);font-weight:500;letter-spacing:-.01em;transition:color .3s var(--ease);
-}
+.faq summary{padding:21px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;
+  gap:20px;align-items:flex-start;font-size:clamp(17px,2vw,21px);font-weight:600;letter-spacing:-.02em;
+  line-height:1.3;color:var(--ink);transition:color .3s var(--ease)}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary:hover{color:#fff}
-.faq summary i{flex:0 0 auto;width:18px;height:18px;position:relative;margin-top:4px}
-.faq summary i::before,.faq summary i::after{
-  content:"";position:absolute;background:var(--dim);transition:.35s var(--ease);
-  left:50%;top:50%;transform:translate(-50%,-50%);
-}
-.faq summary i::before{width:14px;height:1px}
-.faq summary i::after{width:1px;height:14px}
+.faq summary:hover{color:var(--green)}
+.faq summary i{flex:0 0 auto;width:20px;height:20px;position:relative;margin-top:4px}
+.faq summary i::before,.faq summary i::after{content:"";position:absolute;background:var(--green);
+  left:50%;top:50%;transform:translate(-50%,-50%);transition:.35s var(--ease)}
+.faq summary i::before{width:15px;height:2px}
+.faq summary i::after{width:2px;height:15px}
 .faq details[open] summary i::after{transform:translate(-50%,-50%) scaleY(0)}
-.faq details[open] summary{color:#fff}
-.faq .a{padding:0 0 24px;font-size:14px;line-height:1.78;color:var(--dim);max-width:74ch}
-.faq .a b{color:var(--txt);font-weight:500}
+.faq details[open] summary{color:var(--green)}
+.faq .a{padding:0 0 23px;font-size:14.5px;line-height:1.78;color:var(--ink-2);max-width:74ch}
+.faq .a b{color:var(--ink);font-weight:600}
 
-/* ---------- FORMULARIO ---------- */
-.signup{
-  border:1px solid var(--line-strong);border-radius:22px;padding:clamp(24px,3.4vw,44px);
-  background:linear-gradient(158deg,rgba(255,255,255,.06),rgba(255,255,255,.014));
-  box-shadow:0 30px 70px rgba(0,0,0,.5);
-}
-.fields{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:26px}
+/* formulario */
+.signup{background:#fff;border:1px solid var(--line);padding:clamp(24px,3.2vw,48px);
+  box-shadow:0 30px 70px rgba(22,24,28,.10)}
+.fields{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:26px}
 @media (max-width:680px){.fields{grid-template-columns:1fr}}
 .field{display:flex;flex-direction:column;gap:8px}
 .field.wide{grid-column:1 / -1}
-.field label{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim-2)}
-.field input,.field select{
-  font:inherit;font-size:14px;font-weight:300;color:var(--txt);
-  background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:12px;padding:14px 15px;
-  transition:.35s var(--ease);width:100%;
-}
-.field input::placeholder{color:var(--dim-2)}
-.field input:focus,.field select:focus{border-color:rgba(207,224,255,.5);background:rgba(255,255,255,.055);outline:none}
-.field select option{background:#0c0d11;color:var(--txt)}
+.field label{font-family:'Roboto Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.field input,.field select{font-family:'Archivo',sans-serif;font-size:15px;color:var(--ink);
+  background:var(--paper);border:1px solid var(--line);padding:14px 15px;width:100%;
+  transition:.3s var(--ease);border-radius:0}
+.field input::placeholder{color:var(--ink-3)}
+.field input:focus,.field select:focus{border-color:var(--green);background:#fff;outline:none;
+  box-shadow:0 0 0 3px rgba(31,111,92,.12)}
 .form-foot{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:22px}
-.done{
-  display:none;align-items:center;gap:12px;font-size:13.5px;color:var(--ok);
-  border:1px solid rgba(142,240,192,.3);background:rgba(142,240,192,.07);border-radius:14px;padding:16px 18px;margin-top:22px;
-}
+.done{display:none;align-items:center;gap:12px;font-size:14px;color:var(--green);
+  border:1px solid rgba(31,111,92,.35);background:var(--green-l);padding:16px 18px;margin-top:20px}
 .done.on{display:flex}
-.done svg{width:17px;height:17px;stroke:var(--ok);fill:none;stroke-width:2;flex:0 0 auto}
+.done svg{width:18px;height:18px;stroke:var(--green);fill:none;stroke-width:2.4;flex:0 0 auto}
 
-.foot{
-  padding:36px var(--pad) 46px;border-top:1px solid var(--line);position:relative;z-index:10;
+.foot{padding:32px var(--pad) 44px;border-top:1px solid var(--line);position:relative;z-index:10;
   display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
-  font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim-2);
-}
+  font-family:'Roboto Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
 .foot a{text-decoration:none;transition:color .3s}
-.foot a:hover{color:var(--txt)}
+.foot a:hover{color:var(--green)}
 
-/* ---------- REVELADO ---------- */
-.rv{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+/* ============ MOVIMIENTO ============ */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
 .rv.on{opacity:1;transform:none}
-.rv.d1{transition-delay:.07s}.rv.d2{transition-delay:.14s}.rv.d3{transition-delay:.21s}
-.rv.d4{transition-delay:.28s}.rv.d5{transition-delay:.35s}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}
+.rv.d4{transition-delay:.32s}.rv.d5{transition-delay:.4s}
+.mask{overflow:hidden;display:block}
+.mask>span{display:block;transform:translateY(104%);transition:transform 1s var(--ease)}
+.mask.on>span{transform:none}
 
-body.lite .beam{animation:none;opacity:.5}
-body.lite .grain{display:none}
+body.lite .shaft{animation:none}
+body.lite .marquee-in{animation:none}
+body.lite #motes{display:none}
+body.lite .scroll-cue i{animation:none}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.1ms!important}
   .rv{opacity:1;transform:none}
+  .mask>span,.cover h1 .ln>span{transform:none}
 }
 </style>
 </head>
 <body>
 
-<div class="stage">
+<div class="scene">
   <div class="room"></div>
-  <div class="beam b1"></div><div class="beam b2"></div><div class="beam b3"></div>
-  <div class="lamp l1"></div><div class="lamp l2"></div><div class="lamp l3"></div>
-  <div class="grain"></div><div class="vig"></div>
+  <div class="wins" id="wins">
+    <div class="win w1"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="win w2"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="shaft s1"></div><div class="shaft s2"></div><div class="shaft s3"></div>
+  <canvas id="motes"></canvas>
+  <div class="plasterTex"></div>
+  <div class="floorline"></div>
 </div>
 
+<div class="tape"><i id="tapeBar"></i></div>
+
 <nav class="nav">
-  <div class="nav-mark">NEXO</div>
+  <div class="nav-mark">NEX<b>O</b></div>
   <div class="nav-links">
     <a href="index.html"><span class="full">La app</span><span class="short">App</span></a>
     <a href="negocio.html"><span class="full">Modelo de negocio</span><span class="short">Negocio</span></a>
@@ -329,30 +393,55 @@ body.lite .grain{display:none}
 
 <main>
 
-<!-- ============ HERO ============ -->
-<section class="hero">
+<!-- ============ PORTADA ============ -->
+<section class="cover" id="portada">
   <div class="wrap">
-    <div class="eyebrow rv"><i></i> Para entrenadores independientes</div>
-    <h1 class="rv d1">Tu local.<br><span class="sil">Sin local.</span></h1>
-    <p class="sub rv d2">Una sala privada y equipada que reservas por horas, solo cuando la necesitas. Trae a tus clientes, cobra tu precio y olvídate del alquiler, la reforma y la permanencia.</p>
-    <div class="hero-cta rv d3">
-      <a class="btn" href="#solicitar">Solicitar plaza <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
-      <a class="btn ghost" href="#como">Ver cómo funciona</a>
+    <div class="tag rv"><i></i> Para entrenadores independientes</div>
+
+    <div class="cover-grid">
+      <div>
+        <h1>
+          <span class="ln"><span>Tu local.</span></span>
+          <span class="ln"><span>Sin local.</span></span>
+        </h1>
+        <p class="say rv d3">Una <b>sala privada de entrenamiento funcional</b>, equipada y solo para ti, que reservas por horas. Traes a tus clientes, cobras tu precio y te olvidas del alquiler, la reforma y la permanencia.</p>
+
+        <div class="hardfacts rv d4">
+          <div><b>18 €</b><s>La hora de sala</s></div>
+          <div><b>0 €</b><s>Cuota fija</s></div>
+          <div><b>8+1</b><s>Aforo por reserva</s></div>
+          <div><b>24/7</b><s>Acceso con móvil</s></div>
+        </div>
+
+        <div class="cta-row rv d5">
+          <a class="btn" href="#solicitar">Solicitar plaza <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+          <a class="btn ghost" href="#como">Cómo funciona</a>
+        </div>
+      </div>
+
+      <div class="ticket rv d4">
+        <div class="h">Centro piloto · Sala A</div>
+        <div class="row"><span>Superficie</span><b>120 m²</b></div>
+        <div class="row"><span>Aforo</span><b>8 + entrenador</b></div>
+        <div class="row"><span>Horario</span><b>24 h</b></div>
+        <div class="row"><span>Recepción</span><b>No hay</b></div>
+        <div class="row"><span>Permanencia</span><b>Ninguna</b></div>
+        <div class="row big"><span>Sala por hora</span><b>18 €</b></div>
+        <div class="h" style="border:0;padding:12px 0 0;margin:8px 0 0">Cifras provisionales</div>
+      </div>
     </div>
-    <div class="hero-facts rv d4">
-      <div><b>0 €</b><s>Cuota fija</s></div>
-      <div><b>0</b><s>Permanencia</s></div>
-      <div><b>Tú</b><s>Fijas tu precio</s></div>
-      <div><b>24/7</b><s>Acceso con el móvil</s></div>
-    </div>
+
+    <div class="scroll-cue rv d5"><i></i> Desliza</div>
   </div>
 </section>
+
+<div class="marquee" aria-hidden="true"><div class="marquee-in" id="marquee"></div></div>
 
 <!-- ============ EL PROBLEMA ============ -->
 <section id="problema">
   <div class="wrap">
-    <h2 class="rv">Sabes entrenar.<br><span class="sil">El problema es dónde.</span></h2>
-    <p class="lead rv d1" style="margin-bottom:40px">Montar un local propio son miles de euros y años de compromiso. El gimnasio convencional no te deja trabajar allí, o te obliga a entrar en plantilla. Y la sala común no es sitio para una sesión personal.</p>
+    <h2 class="rv"><span class="mask"><span>Sabes entrenar.</span></span><span class="mask"><span>El problema es <em>dónde</em>.</span></span></h2>
+    <p class="lead rv d1" style="margin-bottom:38px">Montar un local propio son miles de euros y años de compromiso. El gimnasio convencional no te deja trabajar allí, o te obliga a entrar en plantilla. Y la sala común no es sitio para una sesión personal.</p>
     <div class="grid g3">
       <div class="card rv d1"><span class="k">01</span><h3>Sin inversión inicial</h3><p>No hay traspaso, ni reforma, ni fianza, ni compra de material. Pagas las horas que usas y nada más.</p></div>
       <div class="card rv d2"><span class="k">02</span><h3>Sin plantilla</h3><p>No trabajas para NEXO. No hay relación laboral, ni horario impuesto, ni exclusividad. Tus clientes siguen siendo tuyos.</p></div>
@@ -364,13 +453,13 @@ body.lite .grain{display:none}
 <!-- ============ CÓMO FUNCIONA ============ -->
 <section id="como">
   <div class="wrap">
-    <div class="eyebrow rv"><i></i> Cómo funciona</div>
-    <h2 class="rv d1">Tres pasos y <span class="sil">estás dentro</span></h2>
-    <p class="lead rv d2" style="margin-bottom:40px">Sin llamadas, sin recepción y sin esperar a que alguien te abra.</p>
+    <div class="tag rv"><i></i> Cómo funciona</div>
+    <h2 class="rv d1"><span class="mask"><span>Tres pasos y <em>estás dentro</em></span></span></h2>
+    <p class="lead rv d2" style="margin-bottom:36px">Sin llamadas, sin recepción y sin esperar a que alguien te abra.</p>
     <div class="steps">
-      <div class="stp rv d1"><div class="n">01</div><h3>Reservas la sala</h3><p>Miras la disponibilidad real desde la app, eliges día, hora y duración, e indicas cuántos alumnos vas a traer. Si está libre ahora mismo, puedes reservar y entrar.</p></div>
-      <div class="stp rv d2"><div class="n">02</div><h3>Llevas a tus clientes</h3><p>Hasta ocho personas más tú. Tú cobras tu sesión como lo hagas habitualmente; a NEXO solo le pagas la sala.</p></div>
-      <div class="stp rv d3"><div class="n">03</div><h3>Entras con el móvil</h3><p>La reserva confirmada genera tu acceso: abres desde la app o con un código temporal, válido solo durante tu franja.</p></div>
+      <div class="stp rv d1"><div class="n">Paso 01</div><h3>Reservas la sala</h3><p>Miras la disponibilidad real desde la app, eliges día, hora y duración, e indicas cuántos alumnos vas a traer. Si está libre ahora mismo, puedes reservar y entrar.</p></div>
+      <div class="stp rv d2"><div class="n">Paso 02</div><h3>Llevas a tus clientes</h3><p>Hasta ocho personas más tú. Tú cobras tu sesión como lo hagas habitualmente; a NEXO solo le pagas la sala.</p></div>
+      <div class="stp rv d3"><div class="n">Paso 03</div><h3>Entras con el móvil</h3><p>La reserva confirmada genera tu acceso: abres desde la app o con un código temporal, válido solo durante tu franja.</p></div>
     </div>
   </div>
 </section>
@@ -378,8 +467,8 @@ body.lite .grain{display:none}
 <!-- ============ DOS MODOS ============ -->
 <section id="modos">
   <div class="wrap">
-    <h2 class="rv">Úsalo como <span class="sil">espacio, como escaparate,<br>o como las dos cosas</span></h2>
-    <p class="lead rv d1" style="margin-bottom:40px">Son dos formas independientes de trabajar con NEXO. Puedes quedarte solo en la primera todo el tiempo que quieras.</p>
+    <h2 class="rv"><span class="mask"><span>Úsalo como espacio,</span></span><span class="mask"><span>como <em>escaparate</em>, o ambas</span></span></h2>
+    <p class="lead rv d1" style="margin-bottom:36px">Son dos formas independientes de trabajar con NEXO. Puedes quedarte solo en la primera todo el tiempo que quieras.</p>
     <div class="grid g2">
       <div class="mode rv d1">
         <span class="pill">Modo A</span>
@@ -392,7 +481,7 @@ body.lite .grain{display:none}
         </ul>
       </div>
       <div class="mode hot rv d2">
-        <span class="pill cold">Modo B</span>
+        <span class="pill on">Modo B</span>
         <h3>Espacio y clientes nuevos</h3>
         <p class="sm">Además creas tu perfil profesional. Cualquiera que busque un entrenador en NEXO te encuentra por especialidad, precio, experiencia y valoración.</p>
         <ul class="list">
@@ -408,18 +497,18 @@ body.lite .grain{display:none}
 <!-- ============ LA SALA ============ -->
 <section id="sala">
   <div class="wrap">
-    <div class="eyebrow rv"><i></i> El espacio</div>
-    <h2 class="rv d1">Una sala grande, <span class="sil">no una esquina</span></h2>
+    <div class="tag rv"><i></i> El espacio</div>
+    <h2 class="rv d1"><span class="mask"><span>Una nave, <em>no una esquina</em></span></span></h2>
     <p class="lead rv d2">Equipada para entrenamiento funcional en sentido amplio, no para una sola disciplina. La idea es que entrenadores con especialidades distintas puedan trabajar cada uno a su manera.</p>
-    <div class="kit rv d2" style="margin-top:32px">
+    <div class="kit rv d2" style="margin-top:30px">
       <span>Rack</span><span>Barras olímpicas</span><span>Discos</span><span>Mancuernas</span>
       <span>Kettlebells</span><span>Material funcional</span><span>TRX</span><span>Sacos</span>
-      <span>Cajones</span><span>Gomas</span><span>Esterillas</span><span>Espacio libre para desplazamientos</span>
+      <span>Cajones</span><span>Gomas</span><span>Esterillas</span><span>Espacio libre</span>
     </div>
     <div class="specs rv d3">
-      <div class="spec"><b>120 m²</b><s>Sala A</s></div>
+      <div class="spec"><b data-count="120">0</b><s>m² de sala</s></div>
       <div class="spec"><b>8+1</b><s>Aforo máximo</s></div>
-      <div class="spec"><b>24 h</b><s>Franjas disponibles</s></div>
+      <div class="spec"><b data-count="24">0</b><s>Horas al día</s></div>
       <div class="spec"><b>1</b><s>Reserva por franja</s></div>
     </div>
     <p class="note rv d3" style="margin-top:20px">Si te falta algo concreto para tu especialidad, dínoslo en la solicitud. El inventario del centro piloto todavía se está cerrando y es el mejor momento para influir en él.</p>
@@ -429,9 +518,9 @@ body.lite .grain{display:none}
 <!-- ============ DINERO ============ -->
 <section id="precio">
   <div class="wrap">
-    <div class="eyebrow rv"><i></i> El dinero</div>
-    <h2 class="rv d1">Tú pones tu precio.<br><span class="sil">Nosotros cobramos la sala.</span></h2>
-    <p class="lead rv d2" style="margin-bottom:36px">Son dos cosas separadas. NEXO no decide cuánto vale tu hora, ni te impone una tarifa, ni te compara por precio con nadie.</p>
+    <div class="tag rv"><i></i> El dinero</div>
+    <h2 class="rv d1"><span class="mask"><span>Tú pones tu precio.</span></span><span class="mask"><span>Nosotros cobramos <em>la sala</em>.</span></span></h2>
+    <p class="lead rv d2" style="margin-bottom:34px">Son dos cosas separadas. NEXO no decide cuánto vale tu hora, ni te impone una tarifa, ni te compara por precio con nadie.</p>
     <div class="grid g2" style="align-items:start">
       <div class="rv d2">
         <h3 style="margin-bottom:14px">Una sesión de una hora con cuatro alumnos</h3>
@@ -441,12 +530,12 @@ body.lite .grain{display:none}
           <div class="money-row"><span>Coste por alumno si repartes la sala</span><b>4,50 €</b></div>
           <div class="money-row total"><span>Le pagas a NEXO</span><b>18 €</b></div>
         </div>
-        <p class="note" style="margin-top:14px">Cifras provisionales del centro piloto, todavía sin cerrar.</p>
+        <p class="note" style="margin-top:13px">Cifras provisionales del centro piloto, todavía sin cerrar.</p>
       </div>
-      <div class="card rv d3" style="gap:16px">
-        <span class="pill ok">Transparencia</span>
+      <div class="card rv d3" style="gap:15px">
+        <span class="tag" style="margin:0">Transparencia</span>
         <h3>Lo que aún no hemos decidido</h3>
-        <p>Si captas un cliente a través del marketplace, es razonable que NEXO se lleve una comisión sobre esa sesión. <b style="color:var(--txt);font-weight:500">Todavía no hemos fijado cuánto.</b> Preferimos hablarlo con los primeros entrenadores antes de abrir, en lugar de imponer un número y corregirlo después.</p>
+        <p>Si captas un cliente a través del marketplace, es razonable que NEXO se lleve una comisión sobre esa sesión. <b style="color:var(--ink);font-weight:600">Todavía no hemos fijado cuánto.</b> Preferimos hablarlo con los primeros entrenadores antes de abrir, en lugar de imponer un número y corregirlo después.</p>
         <p>Lo que sí está claro: por las sesiones con tus propios clientes, NEXO cobra la sala y nada más.</p>
       </div>
     </div>
@@ -456,12 +545,12 @@ body.lite .grain{display:none}
 <!-- ============ PERFIL ============ -->
 <section id="perfil">
   <div class="wrap">
-    <div class="grid g2" style="align-items:center;gap:clamp(24px,4vw,56px)">
+    <div class="grid g2" style="align-items:center;gap:clamp(26px,4vw,60px)">
       <div>
-        <div class="eyebrow rv"><i></i> Tu escaparate</div>
-        <h2 class="rv d1">Un perfil que <span class="sil">trabaja por ti</span></h2>
+        <div class="tag rv"><i></i> Tu escaparate</div>
+        <h2 class="rv d1"><span class="mask"><span>Un perfil que <em>trabaja</em> por ti</span></span></h2>
         <p class="lead rv d2">Quien busca entrenador en NEXO ve tu ficha completa y decide con criterio, no por quién estaba de turno ese día.</p>
-        <ul class="list rv d3" style="margin-top:26px">
+        <ul class="list rv d3" style="margin-top:24px">
           <li>Fotografía, descripción y años de experiencia</li>
           <li>Formación y certificaciones</li>
           <li>Especialidades, tantas como trabajes</li>
@@ -477,28 +566,23 @@ body.lite .grain{display:none}
           <div><div class="n">Marta Ruiz</div><div class="s">Fuerza · Halterofilia</div></div>
         </div>
         <div class="pm-stats">
-          <div><b>★ 4.9</b><s>128 valoraciones</s></div>
-          <div><b>9</b><s>Años exp.</s></div>
-          <div><b>640</b><s>Sesiones</s></div>
+          <div><b>4.9</b><s>128 valoraciones</s></div>
+          <div><b data-count="9">0</b><s>Años exp.</s></div>
+          <div><b data-count="640">0</b><s>Sesiones</s></div>
         </div>
-        <div class="pm-tags">
-          <i>Fuerza máxima</i><i>Técnica olímpica</i><i>Powerlifting</i><i>Programación</i>
-        </div>
-        <div class="pm-price">
-          <span class="l">Precio por sesión</span>
-          <span class="v">35 € <em>/ hora</em></span>
-        </div>
+        <div class="pm-tags"><i>Fuerza máxima</i><i>Técnica olímpica</i><i>Powerlifting</i><i>Programación</i></div>
+        <div class="pm-price"><span class="l">Precio por sesión</span><span class="v">35 € <em>/ hora</em></span></div>
       </div>
     </div>
-    <p class="note rv d3" style="margin-top:26px">Ficha de ejemplo. Puedes verla dentro de la <a href="index.html" style="color:var(--cold)">demo de la app</a>, en el buscador de entrenadores.</p>
+    <p class="note rv d3" style="margin-top:24px">Ficha de ejemplo. Puedes verla dentro de la <a href="index.html" style="color:var(--green)">demo de la app</a>, en el buscador de entrenadores.</p>
   </div>
 </section>
 
-<!-- ============ TU PANEL ============ -->
+<!-- ============ PANEL ============ -->
 <section id="panel">
   <div class="wrap">
-    <h2 class="rv">Y un panel <span class="sil">para llevar tu negocio</span></h2>
-    <div class="grid g3" style="margin-top:36px">
+    <h2 class="rv"><span class="mask"><span>Y un panel para <em>llevar tu negocio</em></span></span></h2>
+    <div class="grid g3" style="margin-top:32px">
       <div class="card rv d1"><span class="k">Agenda</span><h3>Próximas sesiones</h3><p>Qué tienes reservado, cuándo y con cuántas personas. Y las franjas libres de la sala para encajar a un cliente nuevo.</p></div>
       <div class="card rv d2"><span class="k">Ingresos</span><h3>Lo que llevas facturado</h3><p>Historial de reservas y de ingresos, con el detalle de cada sesión.</p></div>
       <div class="card rv d3"><span class="k">Clientes</span><h3>Con quién has trabajado</h3><p>Información básica de los clientes con los que has hecho sesiones, respetando en todo momento sus permisos y su privacidad.</p></div>
@@ -509,9 +593,9 @@ body.lite .grain{display:none}
 <!-- ============ FAQ ============ -->
 <section id="dudas">
   <div class="wrap" style="max-width:900px">
-    <div class="eyebrow rv"><i></i> Antes de que preguntes</div>
-    <h2 class="rv d1">Las dudas <span class="sil">de siempre</span></h2>
-    <div class="faq rv d2" style="margin-top:36px">
+    <div class="tag rv"><i></i> Antes de que preguntes</div>
+    <h2 class="rv d1"><span class="mask"><span>Las dudas <em>de siempre</em></span></span></h2>
+    <div class="faq rv d2" style="margin-top:32px">
       <details><summary>¿Tengo que trabajar en exclusiva para NEXO?<i></i></summary>
         <div class="a">No. No hay relación laboral ni exclusividad. Puedes seguir trabajando donde ya trabajes, entrenar en la calle, en casa del cliente o en otro centro. NEXO es un espacio que alquilas por horas, no un empleador.</div></details>
       <details><summary>¿Puedo traer a mis propios clientes?<i></i></summary>
@@ -534,14 +618,14 @@ body.lite .grain{display:none}
 
 <!-- ============ SOLICITUD ============ -->
 <section id="solicitar">
-  <div class="wrap" style="max-width:880px">
-    <div class="signup">
-      <div class="eyebrow rv"><i></i> Centro piloto</div>
-      <h2 class="rv d1" style="margin-bottom:16px">Queremos hablar con los <span class="sil">primeros entrenadores</span></h2>
-      <p class="lead rv d2">Todavía estamos cerrando equipamiento, horarios y condiciones. Si te interesa entrar desde el principio, tu opinión cambia cosas que aún se pueden cambiar.</p>
+  <div class="wrap" style="max-width:900px">
+    <div class="signup rv">
+      <div class="tag"><i></i> Centro piloto</div>
+      <h2 style="margin-bottom:16px">Queremos hablar con los <em>primeros entrenadores</em></h2>
+      <p class="lead">Todavía estamos cerrando equipamiento, horarios y condiciones. Si te interesa entrar desde el principio, tu opinión cambia cosas que aún se pueden cambiar.</p>
 
       <form id="form" novalidate>
-        <div class="fields rv d3">
+        <div class="fields">
           <div class="field"><label for="f-nombre">Nombre y apellidos</label>
             <input id="f-nombre" name="nombre" type="text" placeholder="Marta Ruiz" autocomplete="name"></div>
           <div class="field"><label for="f-email">Correo electrónico</label>
@@ -560,7 +644,7 @@ body.lite .grain{display:none}
           <div class="field wide"><label for="f-nota">¿Qué necesitarías en la sala? (opcional)</label>
             <input id="f-nota" name="nota" type="text" placeholder="Material, horarios, cualquier cosa que te haga falta"></div>
         </div>
-        <div class="form-foot rv d4">
+        <div class="form-foot">
           <button class="btn" type="submit">Enviar solicitud <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
           <span class="note" style="margin:0">Sin compromiso. Te escribimos antes de la apertura.</span>
         </div>
@@ -617,15 +701,108 @@ const $$=(s,c)=>Array.from((c||document).querySelectorAll(s));
   })();
 })();
 
+/* ---------- Motas de polvo suspendidas en la luz ---------- */
+(function motes(){
+  const cv=$('#motes'); if(!cv) return;
+  const ctx=cv.getContext('2d');
+  const DPR=Math.min(devicePixelRatio||1,1.5);
+  let w,h,parts=[],paused=false;
+  const SP=48, sprite=document.createElement('canvas');
+  sprite.width=sprite.height=SP;
+  (function(){
+    const c=sprite.getContext('2d'), g=c.createRadialGradient(SP/2,SP/2,0,SP/2,SP/2,SP/2);
+    g.addColorStop(0,'rgba(255,255,255,1)');
+    g.addColorStop(.3,'rgba(255,252,244,.55)');
+    g.addColorStop(1,'rgba(255,250,240,0)');
+    c.fillStyle=g;c.fillRect(0,0,SP,SP);
+  })();
+  function mk(){
+    return {x:Math.random()*w,y:Math.random()*h,r:(Math.random()*4+2)*DPR,
+      vy:-(Math.random()*.18+.04)*DPR,vx:(Math.random()-.5)*.14*DPR,
+      a:Math.random()*.5+.15,ph:Math.random()*Math.PI*2};
+  }
+  function size(){
+    w=cv.width=Math.round(innerWidth*DPR); h=cv.height=Math.round(innerHeight*DPR);
+    cv.style.width=innerWidth+'px'; cv.style.height=innerHeight+'px';
+    parts=Array.from({length: innerWidth<900?26:62},mk);
+  }
+  addEventListener('resize',size); size();
+  document.addEventListener('visibilitychange',()=>{paused=document.hidden});
+  (function draw(t){
+    requestAnimationFrame(draw);
+    if(paused||document.body.classList.contains('lite')) return;
+    ctx.clearRect(0,0,w,h);
+    for(const p of parts){
+      p.y+=p.vy; p.x+=p.vx+Math.sin(t*.0004+p.ph)*.24*DPR;
+      if(p.y<-20){p.y=h+20;p.x=Math.random()*w;}
+      ctx.globalAlpha=p.a*(.55+.45*Math.sin(t*.0014+p.ph));
+      ctx.drawImage(sprite,p.x-p.r,p.y-p.r,p.r*2,p.r*2);
+    }
+    ctx.globalAlpha=1;
+  })(0);
+})();
+
+/* ---------- Cinta rodante ---------- */
+(function(){
+  const el=$('#marquee');
+  const palabras=['Sin cuota mensual','Sin permanencia','Sin recepción','Tú fijas tu precio',
+                  'Tus clientes siguen siendo tuyos','La sala entera para ti','Acceso 24 h'];
+  const bloque=palabras.map(p=>`<span>${p}<i></i></span>`).join('');
+  el.innerHTML=bloque+bloque;
+})();
+
 /* ---------- Revelado al deslizar ---------- */
 (function(){
   const io=new IntersectionObserver(es=>{
     es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } });
   },{rootMargin:'0px 0px -10% 0px',threshold:.1});
   $$('.rv').forEach(el=>io.observe(el));
+
+  const mio=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting) return;
+      $$('.mask',e.target).forEach((l,i)=>{ l.style.transitionDelay=(i*.09)+'s'; l.classList.add('on'); });
+      mio.unobserve(e.target);
+    });
+  },{rootMargin:'0px 0px -12% 0px',threshold:.2});
+  $$('h2').forEach(h=>{ if($('.mask',h)) mio.observe(h); });
 })();
 
-/* ---------- Acordeón: solo una pregunta abierta ---------- */
+/* ---------- Contadores ---------- */
+(function(){
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el=e.target, end=+el.dataset.count||0; let s=null;
+      function step(t){
+        if(s===null) s=t;
+        const p=Math.min((t-s)/1200,1);
+        el.textContent=Math.round(end*(1-Math.pow(1-p,3)));
+        if(p<1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+      io.unobserve(el);
+    });
+  },{threshold:.5});
+  $$('[data-count]').forEach(el=>io.observe(el));
+})();
+
+/* ---------- Parallax y progreso ---------- */
+(function(){
+  const wins=$('#wins'), bar=$('#tapeBar');
+  let queued=false;
+  function upd(){
+    queued=false;
+    const y=scrollY, h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.transform='scaleX('+(h>0?Math.min(y/h,1):0)+')';
+    if(document.body.classList.contains('lite')) return;
+    wins.style.transform='translate3d(0,'+(y*.09)+'px,0)';
+  }
+  addEventListener('scroll',()=>{ if(!queued){ queued=true; requestAnimationFrame(upd); } },{passive:true});
+  addEventListener('resize',upd); upd();
+})();
+
+/* ---------- Acordeón ---------- */
 (function(){
   const all=$$('.faq details');
   all.forEach(d=>d.addEventListener('toggle',()=>{
@@ -633,24 +810,16 @@ const $$=(s,c)=>Array.from((c||document).querySelectorAll(s));
   }));
 })();
 
-/* ---------- Formulario (demostrativo: no envía nada) ---------- */
+/* ---------- Formulario (demostrativo) ---------- */
 $('#form').addEventListener('submit',e=>{
   e.preventDefault();
-  const nombre=$('#f-nombre').value.trim();
-  const email=$('#f-email').value.trim();
+  const nombre=$('#f-nombre').value.trim(), email=$('#f-email').value.trim();
   const done=$('#done'), txt=$('#doneTxt');
   if(!nombre || !email.includes('@')){
     txt.textContent='Necesitamos tu nombre y un correo válido para poder responderte.';
-    done.style.color='var(--warn)';
-    done.style.borderColor='rgba(255,217,160,.3)';
-    done.style.background='rgba(255,217,160,.07)';
-    done.querySelector('svg').style.stroke='var(--warn)';
-    done.classList.add('on');
-    return;
+    done.classList.add('on'); return;
   }
   txt.textContent='Gracias, '+nombre.split(' ')[0]+'. Esto es una demo: la solicitud no se ha enviado a ningún sitio.';
-  done.style.color=''; done.style.borderColor=''; done.style.background='';
-  done.querySelector('svg').style.stroke='';
   done.classList.add('on');
 });
 </script>
