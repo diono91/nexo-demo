@@ -87,12 +87,14 @@ a{color:inherit}
 .nav-mark{font-size:15px;font-weight:800;letter-spacing:.3em;text-indent:.3em;
   background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
 .nav-links{display:flex;gap:6px;align-items:center}
-.nav-links a{
+.nav-links a,.nav-links span{
   font-size:10px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;
   color:var(--dim-2);padding:9px 15px;border-radius:100px;border:1px solid transparent;transition:.35s var(--ease);
+  white-space:nowrap;
 }
-.nav-links a:hover{color:var(--txt)}
-.nav-links a.act{color:var(--txt);border-color:var(--line-strong);background:rgba(255,255,255,.045)}
+.nav-links a:hover{color:var(--txt);background:rgba(255,255,255,.05)}
+.nav-links .act{color:var(--txt);border-color:var(--line-strong);background:rgba(255,255,255,.045)}
+@media (max-width:480px){.nav-links a,.nav-links span{font-size:9px;padding:8px 11px;letter-spacing:.14em}}
 .prog{position:fixed;top:0;left:0;right:0;height:1px;z-index:61;background:rgba(255,255,255,.07)}
 .prog i{display:block;height:100%;width:100%;transform:scaleX(0);transform-origin:0 50%;
   background:linear-gradient(90deg,#7f8894,#fff);will-change:transform}
@@ -398,8 +400,8 @@ body.lite .scroll-cue i{animation:none}
 <nav class="nav">
   <div class="nav-mark">NEXO</div>
   <div class="nav-links">
-    <a href="#portada" class="act">Negocio</a>
     <a href="index.html">La app</a>
+    <span class="act">Modelo de negocio</span>
   </div>
 </nav>
 

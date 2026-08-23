@@ -31,7 +31,9 @@
   --silver:linear-gradient(160deg,#ffffff 0%,#c9ced8 22%,#7e848f 46%,#e9edf3 62%,#9aa0ab 82%,#f4f6fa 100%);
   --r:18px;
   --ease:cubic-bezier(.16,1,.3,1);
+  --navh:56px;
 }
+@media (max-width:900px){ :root{ --navh:48px } }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
@@ -175,10 +177,10 @@ body{
 .layout{
   position:relative;z-index:5;height:100%;
   display:grid;grid-template-columns:minmax(300px,1fr) auto minmax(260px,.8fr);
-  align-items:center;gap:40px;padding:40px clamp(20px,4vw,64px);
+  align-items:center;gap:40px;padding:calc(var(--navh) + 26px) clamp(20px,4vw,64px) 40px;
 }
 @media (max-width:1180px){ .layout{grid-template-columns:1fr auto;gap:28px} .col-right{display:none} }
-@media (max-width:900px){ .layout{grid-template-columns:1fr;place-items:center;padding:0} .col-left{display:none} }
+@media (max-width:900px){ .layout{grid-template-columns:1fr;place-items:center;padding:var(--navh) 0 0} .col-left{display:none} }
 
 .reveal{opacity:0;transform:translateY(22px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
 .on .reveal{opacity:1;transform:none}
@@ -195,13 +197,26 @@ body{
 }
 @keyframes sheen{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .brand em{font-style:normal;font-size:9px;letter-spacing:.36em;color:var(--dim-2);text-transform:uppercase;border:1px solid var(--line);padding:5px 9px;border-radius:100px}
-.page-switch{display:flex;gap:4px;margin-top:20px;padding:3px;border:1px solid var(--line);border-radius:100px;width:fit-content}
-.page-switch span,.page-switch a{
-  font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;
-  color:var(--dim-2);padding:9px 16px;border-radius:100px;transition:.35s var(--ease);cursor:none;
+/* Barra superior: idéntica a la de la presentación y presente a cualquier
+   anchura. Antes el conmutador vivía en la columna izquierda, que se oculta
+   por debajo de 900 px: en móvil no había forma de salir de la app. */
+.site-nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;height:var(--navh);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(14px,4vw,64px);
+  background:linear-gradient(180deg,rgba(4,4,6,.94),rgba(4,4,6,.72) 70%,transparent);
 }
-.page-switch a:hover{color:var(--txt);background:rgba(255,255,255,.05)}
-.page-switch .act{background:linear-gradient(150deg,#fff,#ccd2db);color:#07080a;font-weight:600}
+.site-nav .mark{font-size:13px;font-weight:800;letter-spacing:.3em;text-indent:.3em;
+  background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
+.site-nav .links{display:flex;gap:4px;align-items:center}
+.site-nav .links a,.site-nav .links span{
+  font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;
+  color:var(--dim-2);padding:9px 15px;border-radius:100px;border:1px solid transparent;
+  transition:.35s var(--ease);cursor:none;white-space:nowrap;
+}
+.site-nav .links a:hover{color:var(--txt);background:rgba(255,255,255,.05)}
+.site-nav .links .act{color:var(--txt);border-color:var(--line-strong);background:rgba(255,255,255,.05)}
+@media (max-width:900px){ .site-nav .mark{font-size:11px} }
 .tagline{margin-top:22px;font-size:clamp(19px,2vw,27px);font-weight:300;line-height:1.34;color:#cfd3db;max-width:15em}
 .tagline b{font-weight:600;color:#fff}
 .claim{margin-top:16px;font-size:13px;line-height:1.7;color:var(--dim);max-width:30em;font-weight:300}
@@ -282,8 +297,8 @@ body{
 .notch i{position:absolute;right:13px;top:8px;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#2a3b52,#05070a 70%);box-shadow:0 0 5px rgba(120,170,255,.4)}
 
 @media (max-width:900px){
-  .stage-device{width:100vw;height:100dvh}
-  .device{width:100vw;height:100dvh}
+  .stage-device{width:100vw;height:calc(100dvh - var(--navh))}
+  .device{width:100vw;height:calc(100dvh - var(--navh))}
   .device::before,.device::after{display:none}
   .frame{border-radius:0;padding:0;box-shadow:none;background:none}
   .frame::before{display:none}
@@ -645,6 +660,14 @@ body.lite .dot,body.lite .ok-c::before,body.lite .ok-c::after,body.lite .nfc i{a
   <div class="noise"></div>
 </div>
 
+<nav class="site-nav">
+  <div class="mark">NEXO</div>
+  <div class="links">
+    <span class="act">La app</span>
+    <a href="negocio.html">Modelo de negocio</a>
+  </div>
+</nav>
+
 <div id="cur"></div><div id="curRing"></div>
 
 <!-- BOOT -->
@@ -659,10 +682,6 @@ body.lite .dot,body.lite .ok-c::before,body.lite .ok-c::after,body.lite .nfc i{a
   <!-- IZQUIERDA -->
   <div class="col-left">
     <div class="brand reveal d1"><h1>NEXO</h1><em>Demo v0.1</em></div>
-    <div class="page-switch reveal d1">
-      <span class="act">La app</span>
-      <a href="negocio.html">Modelo de negocio</a>
-    </div>
     <p class="tagline reveal d2">Entrena como quieras.<br><b>En un espacio solo para ti.</b></p>
     <p class="claim reveal d3">Red de salas privadas y equipadas para entrenamiento funcional. Se reservan por horas desde la app, con acceso autónomo y un marketplace opcional de entrenadores independientes.</p>
 
