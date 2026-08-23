@@ -87,14 +87,20 @@ a{color:inherit}
 .nav-mark{font-size:15px;font-weight:800;letter-spacing:.3em;text-indent:.3em;
   background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
 .nav-links{display:flex;gap:6px;align-items:center}
-.nav-links a,.nav-links span{
-  font-size:10px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;
-  color:var(--dim-2);padding:9px 15px;border-radius:100px;border:1px solid transparent;transition:.35s var(--ease);
+.nav-links>a,.nav-links>span{
+  font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;
+  color:var(--dim-2);padding:9px 14px;border-radius:100px;border:1px solid transparent;transition:.35s var(--ease);
   white-space:nowrap;
 }
-.nav-links a:hover{color:var(--txt);background:rgba(255,255,255,.05)}
-.nav-links .act{color:var(--txt);border-color:var(--line-strong);background:rgba(255,255,255,.045)}
-@media (max-width:480px){.nav-links a,.nav-links span{font-size:9px;padding:8px 11px;letter-spacing:.14em}}
+.nav-links>a:hover{color:var(--txt);background:rgba(255,255,255,.05)}
+.nav-links>.act{color:var(--txt);border-color:var(--line-strong);background:rgba(255,255,255,.045)}
+.nav-links .short{display:none}
+@media (max-width:760px){
+  .nav-links>a,.nav-links>span{font-size:9px;padding:8px 10px;letter-spacing:.12em}
+  .nav-links .full{display:none}
+  .nav-links .short{display:inline}
+}
+@media (max-width:400px){ .nav-mark{display:none} }
 .prog{position:fixed;top:0;left:0;right:0;height:1px;z-index:61;background:rgba(255,255,255,.07)}
 .prog i{display:block;height:100%;width:100%;transform:scaleX(0);transform-origin:0 50%;
   background:linear-gradient(90deg,#7f8894,#fff);will-change:transform}
@@ -400,8 +406,9 @@ body.lite .scroll-cue i{animation:none}
 <nav class="nav">
   <div class="nav-mark">NEXO</div>
   <div class="nav-links">
-    <a href="index.html">La app</a>
-    <span class="act">Modelo de negocio</span>
+    <a href="index.html"><span class="full">La app</span><span class="short">App</span></a>
+    <span class="act"><span class="full">Modelo de negocio</span><span class="short">Negocio</span></span>
+    <a href="entrenadores.html"><span class="full">Para entrenadores</span><span class="short">Entrenadores</span></a>
   </div>
 </nav>
 

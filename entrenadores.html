@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NEXO para entrenadores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   NEXO — Landing para entrenadores independientes
+   Misma sala y misma luz; estructura de página comercial.
+   ============================================================ */
+
+:root{
+  --bg:#040406;
+  --line:rgba(255,255,255,.085);
+  --line-strong:rgba(255,255,255,.17);
+  --txt:#eef0f4;
+  --dim:#8d939e;
+  --dim-2:#5d636e;
+  --cold:#cfe0ff;
+  --ok:#8ef0c0;
+  --warn:#ffd9a0;
+  --silver:linear-gradient(160deg,#ffffff 0%,#c9ced8 22%,#7e848f 46%,#e9edf3 62%,#9aa0ab 82%,#f4f6fa 100%);
+  --ease:cubic-bezier(.16,1,.3,1);
+  --pad:clamp(22px,6vw,120px);
+  --navh:60px;
+}
+@media (max-width:900px){ :root{ --navh:52px } }
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--txt);
+  font-family:'Inter Tight','Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+::selection{background:rgba(207,224,255,.25)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--cold);outline-offset:3px;border-radius:6px}
+
+/* ---------- LA SALA ---------- */
+.stage{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.room{position:absolute;inset:0;
+  background:
+    radial-gradient(120% 70% at 50% -8%, rgba(190,215,255,.09) 0%, transparent 55%),
+    radial-gradient(70% 50% at 12% 26%, rgba(255,255,255,.042) 0%, transparent 60%),
+    radial-gradient(70% 50% at 88% 66%, rgba(255,255,255,.035) 0%, transparent 60%),
+    linear-gradient(180deg,#07080b 0%,#040406 50%,#020203 100%);
+}
+.beam{position:absolute;top:-14vh;width:32vw;height:128vh;
+  background:linear-gradient(180deg,rgba(255,255,255,.16) 0%,rgba(216,232,255,.07) 20%,rgba(190,215,255,.028) 46%,transparent 78%);
+  clip-path:polygon(41% 0%,59% 0%,100% 100%,0% 100%);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 26%,#000 74%,transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0%,#000 26%,#000 74%,transparent 100%);
+  transform-origin:50% 0%;will-change:transform;backface-visibility:hidden;
+}
+.beam.b1{left:-5vw;animation:sway1 19s ease-in-out infinite}
+.beam.b2{left:34vw;animation:sway2 23s ease-in-out infinite;opacity:.7}
+.beam.b3{right:-7vw;animation:sway3 21s ease-in-out infinite}
+@keyframes sway1{0%,100%{transform:rotate(7deg)}50%{transform:rotate(12deg)}}
+@keyframes sway2{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
+@keyframes sway3{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(-13deg)}}
+.lamp{position:absolute;top:-2px;width:120px;height:4px;border-radius:0 0 40px 40px;
+  background:linear-gradient(180deg,#fff,#cfe0ff 60%,rgba(207,224,255,0));
+  box-shadow:0 0 36px 10px rgba(207,224,255,.42),0 0 110px 26px rgba(160,190,255,.16)}
+.lamp.l1{left:7vw}.lamp.l2{left:calc(50vw - 60px)}.lamp.l3{right:7vw}
+.grain{position:absolute;inset:0;opacity:.028;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");}
+.vig{position:absolute;inset:0;background:radial-gradient(120% 85% at 50% 45%,transparent 42%,rgba(0,0,0,.7) 100%)}
+
+/* ---------- NAVEGACIÓN (compartida) ---------- */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;height:var(--navh);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:0 clamp(14px,4vw,64px);
+  background:linear-gradient(180deg,rgba(4,4,6,.94),rgba(4,4,6,.72) 70%,transparent);
+}
+.nav-mark{font-size:13px;font-weight:800;letter-spacing:.3em;text-indent:.3em;flex:0 0 auto;
+  background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-links a,.nav-links span{
+  font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;white-space:nowrap;
+  color:var(--dim-2);padding:9px 14px;border-radius:100px;border:1px solid transparent;transition:.35s var(--ease);
+}
+.nav-links a:hover{color:var(--txt);background:rgba(255,255,255,.05)}
+.nav-links .act{color:var(--txt);border-color:var(--line-strong);background:rgba(255,255,255,.05)}
+.nav-links .short{display:none}
+@media (max-width:760px){
+  .nav-links a,.nav-links span{font-size:9px;padding:8px 10px;letter-spacing:.12em}
+  .nav-links .full{display:none}
+  .nav-links .short{display:inline}
+}
+@media (max-width:400px){ .nav-mark{display:none} }
+
+/* ---------- ESTRUCTURA ---------- */
+main{position:relative;z-index:10}
+section{padding:clamp(76px,11vh,150px) var(--pad);position:relative}
+.wrap{max-width:1140px;margin:0 auto}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--cold);border:1px solid rgba(207,224,255,.28);background:rgba(207,224,255,.06);
+  padding:7px 14px;border-radius:100px;margin-bottom:26px;
+}
+.eyebrow i{width:5px;height:5px;border-radius:50%;background:var(--cold);box-shadow:0 0 9px var(--cold)}
+
+h2{font-size:clamp(29px,4.6vw,54px);font-weight:700;letter-spacing:-.035em;line-height:1.05;text-wrap:balance;margin-bottom:22px}
+h2 .sil{background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
+h3{font-size:clamp(16.5px,2vw,21px);font-weight:600;letter-spacing:-.015em;line-height:1.28}
+.lead{font-size:clamp(15.5px,1.6vw,19px);line-height:1.72;color:#c2c7d0;max-width:60ch;font-weight:300}
+p.sm{font-size:14px;line-height:1.75;color:var(--dim);max-width:66ch}
+.note{font-size:11.5px;line-height:1.7;color:var(--dim-2);max-width:60ch}
+
+/* ---------- HERO ---------- */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:calc(var(--navh) + 40px)}
+.hero h1{
+  font-size:clamp(42px,8.4vw,104px);font-weight:800;letter-spacing:-.045em;line-height:.94;
+  text-wrap:balance;max-width:13ch;
+}
+.hero h1 .sil{background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 34px rgba(200,225,255,.18))}
+.hero .sub{margin-top:28px;font-size:clamp(16px,1.9vw,21px);line-height:1.65;color:#c2c7d0;max-width:48ch;font-weight:300}
+.hero-cta{display:flex;gap:11px;flex-wrap:wrap;margin-top:40px}
+.hero-facts{display:flex;gap:30px;flex-wrap:wrap;margin-top:48px;padding-top:26px;border-top:1px solid var(--line)}
+.hero-facts div{display:flex;flex-direction:column;gap:6px}
+.hero-facts b{font-size:20px;font-weight:600;background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-facts s{text-decoration:none;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim-2)}
+
+.btn{
+  display:inline-flex;align-items:center;gap:11px;text-decoration:none;border:0;cursor:pointer;
+  padding:17px 30px;border-radius:100px;font:inherit;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:#07080a;background:linear-gradient(150deg,#ffffff,#d3d8e0 46%,#ffffff);
+  box-shadow:0 12px 34px rgba(180,205,255,.2);transition:transform .35s var(--ease),box-shadow .35s var(--ease);
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 18px 44px rgba(180,205,255,.3)}
+.btn svg{width:15px;height:15px;stroke:#07080a;fill:none;stroke-width:2}
+.btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line-strong);box-shadow:none}
+.btn.ghost:hover{background:rgba(255,255,255,.05)}
+.btn.ghost svg{stroke:var(--txt)}
+
+/* ---------- REJILLAS ---------- */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:1000px){.g4{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+.card{
+  border:1px solid var(--line);border-radius:17px;padding:clamp(18px,2.2vw,26px);
+  background:linear-gradient(158deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  display:flex;flex-direction:column;gap:12px;
+  transition:border-color .45s var(--ease),transform .45s var(--ease);
+}
+.card:hover{border-color:var(--line-strong);transform:translateY(-3px)}
+.card p{font-size:13.5px;line-height:1.7;color:var(--dim)}
+.card .k{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cold);letter-spacing:.08em}
+
+.list{display:flex;flex-direction:column;gap:10px}
+.list li{list-style:none;display:flex;gap:11px;font-size:13.5px;line-height:1.58;color:var(--dim)}
+.list li::before{content:"";flex:0 0 auto;width:5px;height:5px;border-radius:50%;background:var(--cold);margin-top:7px;opacity:.75}
+
+/* ---------- PASOS ---------- */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;counter-reset:s}
+@media (max-width:760px){.steps{grid-template-columns:1fr}}
+.stp{
+  border:1px solid var(--line);border-radius:17px;padding:26px;position:relative;overflow:hidden;
+  background:linear-gradient(158deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  display:flex;flex-direction:column;gap:12px;
+}
+.stp::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(207,224,255,.5),transparent)}
+.stp .n{font-family:'JetBrains Mono',monospace;font-size:32px;color:rgba(255,255,255,.14);line-height:1}
+.stp p{font-size:13.5px;line-height:1.7;color:var(--dim)}
+
+/* ---------- DOS MODOS ---------- */
+.mode{
+  border:1px solid var(--line);border-radius:20px;padding:clamp(22px,2.8vw,34px);
+  background:linear-gradient(158deg,rgba(255,255,255,.05),rgba(255,255,255,.012));
+  display:flex;flex-direction:column;gap:16px;
+}
+.mode.hot{border-color:var(--line-strong);background:linear-gradient(158deg,rgba(207,224,255,.11),rgba(255,255,255,.015))}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  padding:6px 12px;border-radius:100px;border:1px solid var(--line-strong);color:var(--dim);width:fit-content}
+.pill.cold{color:var(--cold);border-color:rgba(207,224,255,.3);background:rgba(207,224,255,.06)}
+.pill.ok{color:var(--ok);border-color:rgba(142,240,192,.3);background:rgba(142,240,192,.06)}
+
+/* ---------- EQUIPAMIENTO ---------- */
+.kit{display:flex;flex-wrap:wrap;gap:8px}
+.kit span{
+  font-size:12.5px;color:var(--dim);border:1px solid var(--line);padding:11px 16px;border-radius:100px;
+  background:rgba(255,255,255,.025);transition:.35s var(--ease);
+}
+.kit span:hover{color:var(--txt);border-color:var(--line-strong);transform:translateY(-2px)}
+
+.specs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+@media (max-width:760px){.specs{grid-template-columns:repeat(2,1fr)}}
+.spec{border:1px solid var(--line);border-radius:14px;padding:18px;background:rgba(255,255,255,.025);text-align:center}
+.spec b{display:block;font-size:22px;font-weight:700;letter-spacing:-.02em;
+  background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
+.spec s{display:block;text-decoration:none;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim-2);margin-top:7px}
+
+/* ---------- DINERO ---------- */
+.money{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.022)}
+.money-row{display:flex;justify-content:space-between;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);font-size:14px}
+.money-row span:first-child{color:var(--dim)}
+.money-row b{font-weight:600;font-variant-numeric:tabular-nums}
+.money-row.you{background:rgba(142,240,192,.07)}
+.money-row.you b{color:var(--ok)}
+.money-row.total{background:rgba(255,255,255,.05);border-bottom:0;font-size:15px}
+.money-row.total span:first-child{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--txt);align-self:center}
+
+/* ---------- FICHA DE PERFIL ---------- */
+.profile-mock{
+  border:1px solid var(--line-strong);border-radius:20px;padding:24px;
+  background:linear-gradient(158deg,rgba(255,255,255,.07),rgba(255,255,255,.015));
+  box-shadow:0 24px 60px rgba(0,0,0,.55);display:flex;flex-direction:column;gap:16px;
+}
+.pm-top{display:flex;align-items:center;gap:14px}
+.pm-av{width:56px;height:56px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;
+  font-size:18px;font-weight:700;color:#0a0b0e;background:linear-gradient(150deg,#fff,#a8aebb);
+  box-shadow:0 0 0 1px rgba(255,255,255,.18),0 0 28px rgba(190,215,255,.28)}
+.pm-top .n{font-size:18px;font-weight:600;letter-spacing:-.015em}
+.pm-top .s{font-size:11px;color:var(--dim-2);letter-spacing:.08em;text-transform:uppercase;margin-top:5px}
+.pm-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.pm-stats div{border:1px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center;background:rgba(255,255,255,.03)}
+.pm-stats b{display:block;font-size:16px;font-weight:700;
+  background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pm-stats s{display:block;text-decoration:none;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim-2);margin-top:5px}
+.pm-tags{display:flex;flex-wrap:wrap;gap:7px}
+.pm-tags i{font-style:normal;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
+  border:1px solid var(--line);padding:7px 12px;border-radius:100px;background:rgba(255,255,255,.02)}
+.pm-price{display:flex;justify-content:space-between;align-items:center;padding-top:15px;border-top:1px solid var(--line)}
+.pm-price .l{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim-2)}
+.pm-price .v{font-size:19px;font-weight:600}
+.pm-price .v em{font-style:normal;font-size:12px;color:var(--dim-2);font-weight:400}
+
+/* ---------- FAQ ---------- */
+.faq{border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{
+  padding:22px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:20px;align-items:flex-start;
+  font-size:clamp(15px,1.8vw,18px);font-weight:500;letter-spacing:-.01em;transition:color .3s var(--ease);
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:#fff}
+.faq summary i{flex:0 0 auto;width:18px;height:18px;position:relative;margin-top:4px}
+.faq summary i::before,.faq summary i::after{
+  content:"";position:absolute;background:var(--dim);transition:.35s var(--ease);
+  left:50%;top:50%;transform:translate(-50%,-50%);
+}
+.faq summary i::before{width:14px;height:1px}
+.faq summary i::after{width:1px;height:14px}
+.faq details[open] summary i::after{transform:translate(-50%,-50%) scaleY(0)}
+.faq details[open] summary{color:#fff}
+.faq .a{padding:0 0 24px;font-size:14px;line-height:1.78;color:var(--dim);max-width:74ch}
+.faq .a b{color:var(--txt);font-weight:500}
+
+/* ---------- FORMULARIO ---------- */
+.signup{
+  border:1px solid var(--line-strong);border-radius:22px;padding:clamp(24px,3.4vw,44px);
+  background:linear-gradient(158deg,rgba(255,255,255,.06),rgba(255,255,255,.014));
+  box-shadow:0 30px 70px rgba(0,0,0,.5);
+}
+.fields{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:26px}
+@media (max-width:680px){.fields{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:8px}
+.field.wide{grid-column:1 / -1}
+.field label{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim-2)}
+.field input,.field select{
+  font:inherit;font-size:14px;font-weight:300;color:var(--txt);
+  background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:12px;padding:14px 15px;
+  transition:.35s var(--ease);width:100%;
+}
+.field input::placeholder{color:var(--dim-2)}
+.field input:focus,.field select:focus{border-color:rgba(207,224,255,.5);background:rgba(255,255,255,.055);outline:none}
+.field select option{background:#0c0d11;color:var(--txt)}
+.form-foot{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:22px}
+.done{
+  display:none;align-items:center;gap:12px;font-size:13.5px;color:var(--ok);
+  border:1px solid rgba(142,240,192,.3);background:rgba(142,240,192,.07);border-radius:14px;padding:16px 18px;margin-top:22px;
+}
+.done.on{display:flex}
+.done svg{width:17px;height:17px;stroke:var(--ok);fill:none;stroke-width:2;flex:0 0 auto}
+
+.foot{
+  padding:36px var(--pad) 46px;border-top:1px solid var(--line);position:relative;z-index:10;
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim-2);
+}
+.foot a{text-decoration:none;transition:color .3s}
+.foot a:hover{color:var(--txt)}
+
+/* ---------- REVELADO ---------- */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rv.on{opacity:1;transform:none}
+.rv.d1{transition-delay:.07s}.rv.d2{transition-delay:.14s}.rv.d3{transition-delay:.21s}
+.rv.d4{transition-delay:.28s}.rv.d5{transition-delay:.35s}
+
+body.lite .beam{animation:none;opacity:.5}
+body.lite .grain{display:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.1ms!important}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="room"></div>
+  <div class="beam b1"></div><div class="beam b2"></div><div class="beam b3"></div>
+  <div class="lamp l1"></div><div class="lamp l2"></div><div class="lamp l3"></div>
+  <div class="grain"></div><div class="vig"></div>
+</div>
+
+<nav class="nav">
+  <div class="nav-mark">NEXO</div>
+  <div class="nav-links">
+    <a href="index.html"><span class="full">La app</span><span class="short">App</span></a>
+    <a href="negocio.html"><span class="full">Modelo de negocio</span><span class="short">Negocio</span></a>
+    <span class="act"><span class="full">Para entrenadores</span><span class="short">Entrenadores</span></span>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow rv"><i></i> Para entrenadores independientes</div>
+    <h1 class="rv d1">Tu local.<br><span class="sil">Sin local.</span></h1>
+    <p class="sub rv d2">Una sala privada y equipada que reservas por horas, solo cuando la necesitas. Trae a tus clientes, cobra tu precio y olvídate del alquiler, la reforma y la permanencia.</p>
+    <div class="hero-cta rv d3">
+      <a class="btn" href="#solicitar">Solicitar plaza <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+      <a class="btn ghost" href="#como">Ver cómo funciona</a>
+    </div>
+    <div class="hero-facts rv d4">
+      <div><b>0 €</b><s>Cuota fija</s></div>
+      <div><b>0</b><s>Permanencia</s></div>
+      <div><b>Tú</b><s>Fijas tu precio</s></div>
+      <div><b>24/7</b><s>Acceso con el móvil</s></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EL PROBLEMA ============ -->
+<section id="problema">
+  <div class="wrap">
+    <h2 class="rv">Sabes entrenar.<br><span class="sil">El problema es dónde.</span></h2>
+    <p class="lead rv d1" style="margin-bottom:40px">Montar un local propio son miles de euros y años de compromiso. El gimnasio convencional no te deja trabajar allí, o te obliga a entrar en plantilla. Y la sala común no es sitio para una sesión personal.</p>
+    <div class="grid g3">
+      <div class="card rv d1"><span class="k">01</span><h3>Sin inversión inicial</h3><p>No hay traspaso, ni reforma, ni fianza, ni compra de material. Pagas las horas que usas y nada más.</p></div>
+      <div class="card rv d2"><span class="k">02</span><h3>Sin plantilla</h3><p>No trabajas para NEXO. No hay relación laboral, ni horario impuesto, ni exclusividad. Tus clientes siguen siendo tuyos.</p></div>
+      <div class="card rv d3"><span class="k">03</span><h3>Sin compartir la sala</h3><p>Cuando reservas, el espacio entero es tuyo durante esa franja. Nadie entrena al lado ni te ocupa el material.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CÓMO FUNCIONA ============ -->
+<section id="como">
+  <div class="wrap">
+    <div class="eyebrow rv"><i></i> Cómo funciona</div>
+    <h2 class="rv d1">Tres pasos y <span class="sil">estás dentro</span></h2>
+    <p class="lead rv d2" style="margin-bottom:40px">Sin llamadas, sin recepción y sin esperar a que alguien te abra.</p>
+    <div class="steps">
+      <div class="stp rv d1"><div class="n">01</div><h3>Reservas la sala</h3><p>Miras la disponibilidad real desde la app, eliges día, hora y duración, e indicas cuántos alumnos vas a traer. Si está libre ahora mismo, puedes reservar y entrar.</p></div>
+      <div class="stp rv d2"><div class="n">02</div><h3>Llevas a tus clientes</h3><p>Hasta ocho personas más tú. Tú cobras tu sesión como lo hagas habitualmente; a NEXO solo le pagas la sala.</p></div>
+      <div class="stp rv d3"><div class="n">03</div><h3>Entras con el móvil</h3><p>La reserva confirmada genera tu acceso: abres desde la app o con un código temporal, válido solo durante tu franja.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOS MODOS ============ -->
+<section id="modos">
+  <div class="wrap">
+    <h2 class="rv">Úsalo como <span class="sil">espacio, como escaparate,<br>o como las dos cosas</span></h2>
+    <p class="lead rv d1" style="margin-bottom:40px">Son dos formas independientes de trabajar con NEXO. Puedes quedarte solo en la primera todo el tiempo que quieras.</p>
+    <div class="grid g2">
+      <div class="mode rv d1">
+        <span class="pill">Modo A</span>
+        <h3>Solo el espacio</h3>
+        <p class="sm">Ya tienes tu cartera de clientes. Reservas la sala, los traes y entrenas. No apareces en ninguna búsqueda si no quieres, y NEXO no interviene en tu relación con ellos.</p>
+        <ul class="list">
+          <li>Reservas puntuales o recurrentes</li>
+          <li>Tu precio y tus condiciones con tus clientes</li>
+          <li>Sin perfil público si prefieres no tenerlo</li>
+        </ul>
+      </div>
+      <div class="mode hot rv d2">
+        <span class="pill cold">Modo B</span>
+        <h3>Espacio y clientes nuevos</h3>
+        <p class="sm">Además creas tu perfil profesional. Cualquiera que busque un entrenador en NEXO te encuentra por especialidad, precio, experiencia y valoración.</p>
+        <ul class="list">
+          <li>Apareces en el buscador de entrenadores</li>
+          <li>Recibes solicitudes de gente que no te conocía</li>
+          <li>Acumulas valoraciones ligadas a sesiones reales</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LA SALA ============ -->
+<section id="sala">
+  <div class="wrap">
+    <div class="eyebrow rv"><i></i> El espacio</div>
+    <h2 class="rv d1">Una sala grande, <span class="sil">no una esquina</span></h2>
+    <p class="lead rv d2">Equipada para entrenamiento funcional en sentido amplio, no para una sola disciplina. La idea es que entrenadores con especialidades distintas puedan trabajar cada uno a su manera.</p>
+    <div class="kit rv d2" style="margin-top:32px">
+      <span>Rack</span><span>Barras olímpicas</span><span>Discos</span><span>Mancuernas</span>
+      <span>Kettlebells</span><span>Material funcional</span><span>TRX</span><span>Sacos</span>
+      <span>Cajones</span><span>Gomas</span><span>Esterillas</span><span>Espacio libre para desplazamientos</span>
+    </div>
+    <div class="specs rv d3">
+      <div class="spec"><b>120 m²</b><s>Sala A</s></div>
+      <div class="spec"><b>8+1</b><s>Aforo máximo</s></div>
+      <div class="spec"><b>24 h</b><s>Franjas disponibles</s></div>
+      <div class="spec"><b>1</b><s>Reserva por franja</s></div>
+    </div>
+    <p class="note rv d3" style="margin-top:20px">Si te falta algo concreto para tu especialidad, dínoslo en la solicitud. El inventario del centro piloto todavía se está cerrando y es el mejor momento para influir en él.</p>
+  </div>
+</section>
+
+<!-- ============ DINERO ============ -->
+<section id="precio">
+  <div class="wrap">
+    <div class="eyebrow rv"><i></i> El dinero</div>
+    <h2 class="rv d1">Tú pones tu precio.<br><span class="sil">Nosotros cobramos la sala.</span></h2>
+    <p class="lead rv d2" style="margin-bottom:36px">Son dos cosas separadas. NEXO no decide cuánto vale tu hora, ni te impone una tarifa, ni te compara por precio con nadie.</p>
+    <div class="grid g2" style="align-items:start">
+      <div class="rv d2">
+        <h3 style="margin-bottom:14px">Una sesión de una hora con cuatro alumnos</h3>
+        <div class="money">
+          <div class="money-row"><span>Sala (1 h)</span><b>18 €</b></div>
+          <div class="money-row you"><span>Tu sesión — precio que tú fijas</span><b>Tuyo</b></div>
+          <div class="money-row"><span>Coste por alumno si repartes la sala</span><b>4,50 €</b></div>
+          <div class="money-row total"><span>Le pagas a NEXO</span><b>18 €</b></div>
+        </div>
+        <p class="note" style="margin-top:14px">Cifras provisionales del centro piloto, todavía sin cerrar.</p>
+      </div>
+      <div class="card rv d3" style="gap:16px">
+        <span class="pill ok">Transparencia</span>
+        <h3>Lo que aún no hemos decidido</h3>
+        <p>Si captas un cliente a través del marketplace, es razonable que NEXO se lleve una comisión sobre esa sesión. <b style="color:var(--txt);font-weight:500">Todavía no hemos fijado cuánto.</b> Preferimos hablarlo con los primeros entrenadores antes de abrir, en lugar de imponer un número y corregirlo después.</p>
+        <p>Lo que sí está claro: por las sesiones con tus propios clientes, NEXO cobra la sala y nada más.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PERFIL ============ -->
+<section id="perfil">
+  <div class="wrap">
+    <div class="grid g2" style="align-items:center;gap:clamp(24px,4vw,56px)">
+      <div>
+        <div class="eyebrow rv"><i></i> Tu escaparate</div>
+        <h2 class="rv d1">Un perfil que <span class="sil">trabaja por ti</span></h2>
+        <p class="lead rv d2">Quien busca entrenador en NEXO ve tu ficha completa y decide con criterio, no por quién estaba de turno ese día.</p>
+        <ul class="list rv d3" style="margin-top:26px">
+          <li>Fotografía, descripción y años de experiencia</li>
+          <li>Formación y certificaciones</li>
+          <li>Especialidades, tantas como trabajes</li>
+          <li>Tu precio por sesión</li>
+          <li>Tus franjas de disponibilidad</li>
+          <li>Valoraciones, siempre ligadas a una reserva real</li>
+          <li>Centros NEXO donde trabajas, según crezca la red</li>
+        </ul>
+      </div>
+      <div class="profile-mock rv d2">
+        <div class="pm-top">
+          <div class="pm-av">MR</div>
+          <div><div class="n">Marta Ruiz</div><div class="s">Fuerza · Halterofilia</div></div>
+        </div>
+        <div class="pm-stats">
+          <div><b>★ 4.9</b><s>128 valoraciones</s></div>
+          <div><b>9</b><s>Años exp.</s></div>
+          <div><b>640</b><s>Sesiones</s></div>
+        </div>
+        <div class="pm-tags">
+          <i>Fuerza máxima</i><i>Técnica olímpica</i><i>Powerlifting</i><i>Programación</i>
+        </div>
+        <div class="pm-price">
+          <span class="l">Precio por sesión</span>
+          <span class="v">35 € <em>/ hora</em></span>
+        </div>
+      </div>
+    </div>
+    <p class="note rv d3" style="margin-top:26px">Ficha de ejemplo. Puedes verla dentro de la <a href="index.html" style="color:var(--cold)">demo de la app</a>, en el buscador de entrenadores.</p>
+  </div>
+</section>
+
+<!-- ============ TU PANEL ============ -->
+<section id="panel">
+  <div class="wrap">
+    <h2 class="rv">Y un panel <span class="sil">para llevar tu negocio</span></h2>
+    <div class="grid g3" style="margin-top:36px">
+      <div class="card rv d1"><span class="k">Agenda</span><h3>Próximas sesiones</h3><p>Qué tienes reservado, cuándo y con cuántas personas. Y las franjas libres de la sala para encajar a un cliente nuevo.</p></div>
+      <div class="card rv d2"><span class="k">Ingresos</span><h3>Lo que llevas facturado</h3><p>Historial de reservas y de ingresos, con el detalle de cada sesión.</p></div>
+      <div class="card rv d3"><span class="k">Clientes</span><h3>Con quién has trabajado</h3><p>Información básica de los clientes con los que has hecho sesiones, respetando en todo momento sus permisos y su privacidad.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="dudas">
+  <div class="wrap" style="max-width:900px">
+    <div class="eyebrow rv"><i></i> Antes de que preguntes</div>
+    <h2 class="rv d1">Las dudas <span class="sil">de siempre</span></h2>
+    <div class="faq rv d2" style="margin-top:36px">
+      <details><summary>¿Tengo que trabajar en exclusiva para NEXO?<i></i></summary>
+        <div class="a">No. No hay relación laboral ni exclusividad. Puedes seguir trabajando donde ya trabajes, entrenar en la calle, en casa del cliente o en otro centro. NEXO es un espacio que alquilas por horas, no un empleador.</div></details>
+      <details><summary>¿Puedo traer a mis propios clientes?<i></i></summary>
+        <div class="a">Sí, y es uno de los usos principales. Reservas la sala, indicas cuántos participantes vienen y entrenas. <b>NEXO no se mete en tu relación con ellos</b> ni les cobra nada por separado.</div></details>
+      <details><summary>¿Tengo que aparecer en el buscador de entrenadores?<i></i></summary>
+        <div class="a">No. Puedes usar NEXO únicamente como espacio de trabajo, sin perfil público y sin captar un solo cliente a través de la plataforma.</div></details>
+      <details><summary>¿Quién decide mi precio?<i></i></summary>
+        <div class="a">Tú, libremente. NEXO no impone tarifas ni un precio único de entrenador. Puedes cambiarlo cuando quieras.</div></details>
+      <details><summary>¿Cómo se paga la sala?<i></i></summary>
+        <div class="a">Desde la app, al confirmar la reserva. La cancelación es gratuita hasta <b>24 horas antes</b>; a partir de ahí se aplica una penalización del 70% del importe.</div></details>
+      <details><summary>¿Qué pasa si mi cliente no aparece?<i></i></summary>
+        <div class="a">La franja es tuya igualmente. Ten en cuenta que si pasan <b>10 minutos</b> desde el inicio sin que entre nadie, la sala puede liberarse para otra reserva.</div></details>
+      <details><summary>¿Hay alguien en el centro?<i></i></summary>
+        <div class="a">No. El centro funciona sin recepción: entras y sales con tu acceso digital. Hay cámaras para control de aforo, verificación de entrada y salida e incidencias, con la separación y la retención que exige la normativa.</div></details>
+      <details><summary>¿Cuántos alumnos puedo llevar?<i></i></summary>
+        <div class="a">Hasta ocho personas más tú. Esa reserva bloquea la sala completa: no entra ningún otro grupo durante tu franja.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOLICITUD ============ -->
+<section id="solicitar">
+  <div class="wrap" style="max-width:880px">
+    <div class="signup">
+      <div class="eyebrow rv"><i></i> Centro piloto</div>
+      <h2 class="rv d1" style="margin-bottom:16px">Queremos hablar con los <span class="sil">primeros entrenadores</span></h2>
+      <p class="lead rv d2">Todavía estamos cerrando equipamiento, horarios y condiciones. Si te interesa entrar desde el principio, tu opinión cambia cosas que aún se pueden cambiar.</p>
+
+      <form id="form" novalidate>
+        <div class="fields rv d3">
+          <div class="field"><label for="f-nombre">Nombre y apellidos</label>
+            <input id="f-nombre" name="nombre" type="text" placeholder="Marta Ruiz" autocomplete="name"></div>
+          <div class="field"><label for="f-email">Correo electrónico</label>
+            <input id="f-email" name="email" type="email" placeholder="marta@correo.com" autocomplete="email"></div>
+          <div class="field"><label for="f-esp">Especialidad principal</label>
+            <select id="f-esp" name="especialidad">
+              <option>Fuerza</option><option>Movilidad y readaptación</option>
+              <option>HIIT y acondicionamiento</option><option>Boxeo y deportes de contacto</option>
+              <option>Pre y postparto</option><option>Rendimiento deportivo</option><option>Otra</option>
+            </select></div>
+          <div class="field"><label for="f-hrs">Horas al mes que usarías</label>
+            <select id="f-hrs" name="horas">
+              <option>Menos de 10</option><option>Entre 10 y 25</option>
+              <option>Entre 25 y 50</option><option>Más de 50</option>
+            </select></div>
+          <div class="field wide"><label for="f-nota">¿Qué necesitarías en la sala? (opcional)</label>
+            <input id="f-nota" name="nota" type="text" placeholder="Material, horarios, cualquier cosa que te haga falta"></div>
+        </div>
+        <div class="form-foot rv d4">
+          <button class="btn" type="submit">Enviar solicitud <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
+          <span class="note" style="margin:0">Sin compromiso. Te escribimos antes de la apertura.</span>
+        </div>
+        <div class="done" id="done">
+          <svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 7"/></svg>
+          <span id="doneTxt">Solicitud registrada.</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <span>NEXO · Marca provisional · Demo</span>
+  <span><a href="index.html">La app</a> · <a href="negocio.html">Modelo de negocio</a></span>
+</footer>
+
+<script>
+const $=(s,c)=>(c||document).querySelector(s);
+const $$=(s,c)=>Array.from((c||document).querySelectorAll(s));
+
+/* ---------- Modo ligero ---------- */
+(function lite(){
+  if(/[?&]lite\b/.test(location.search) || matchMedia('(prefers-reduced-motion:reduce)').matches){
+    document.body.classList.add('lite'); return;
+  }
+  function visible(){
+    if(!document.hidden) return Promise.resolve();
+    return new Promise(res=>document.addEventListener('visibilitychange',function h(){
+      if(!document.hidden){document.removeEventListener('visibilitychange',h);res();}
+    }));
+  }
+  function measure(){
+    return new Promise(res=>{
+      let n=0,fiable=true;const t0=performance.now();
+      const onHide=()=>{if(document.hidden)fiable=false};
+      document.addEventListener('visibilitychange',onHide);
+      (function f(){
+        n++;const ms=performance.now()-t0;
+        if(ms<1800) return requestAnimationFrame(f);
+        document.removeEventListener('visibilitychange',onHide);
+        res(fiable? n/(ms/1000):null);
+      })();
+    });
+  }
+  (async function probe(){
+    await visible();
+    const a=await measure(); if(a===null) return probe();
+    if(a>=45) return;
+    const b=await measure(); if(b===null) return probe();
+    if(b<45) document.body.classList.add('lite');
+  })();
+})();
+
+/* ---------- Revelado al deslizar ---------- */
+(function(){
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } });
+  },{rootMargin:'0px 0px -10% 0px',threshold:.1});
+  $$('.rv').forEach(el=>io.observe(el));
+})();
+
+/* ---------- Acordeón: solo una pregunta abierta ---------- */
+(function(){
+  const all=$$('.faq details');
+  all.forEach(d=>d.addEventListener('toggle',()=>{
+    if(d.open) all.forEach(o=>{ if(o!==d) o.open=false; });
+  }));
+})();
+
+/* ---------- Formulario (demostrativo: no envía nada) ---------- */
+$('#form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const nombre=$('#f-nombre').value.trim();
+  const email=$('#f-email').value.trim();
+  const done=$('#done'), txt=$('#doneTxt');
+  if(!nombre || !email.includes('@')){
+    txt.textContent='Necesitamos tu nombre y un correo válido para poder responderte.';
+    done.style.color='var(--warn)';
+    done.style.borderColor='rgba(255,217,160,.3)';
+    done.style.background='rgba(255,217,160,.07)';
+    done.querySelector('svg').style.stroke='var(--warn)';
+    done.classList.add('on');
+    return;
+  }
+  txt.textContent='Gracias, '+nombre.split(' ')[0]+'. Esto es una demo: la solicitud no se ha enviado a ningún sitio.';
+  done.style.color=''; done.style.borderColor=''; done.style.background='';
+  done.querySelector('svg').style.stroke='';
+  done.classList.add('on');
+});
+</script>
+</body>
+</html>

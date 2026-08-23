@@ -1,13 +1,14 @@
 # NEXO
 
-Dos páginas, un único archivo cada una. Sin dependencias, sin instalación.
+Tres páginas, un único archivo cada una. Sin dependencias ni instalación.
 
 - **`index.html`** — Demo visual navegable de la app móvil: inicio, flujo de
   reserva en cuatro pasos, marketplace de entrenadores, historial, perfil y
-  acceso a sala. Es una demo **no funcional**: no hay backend, pagos ni base
-  de datos, y los datos son ficticios.
+  acceso a sala. Demo **no funcional**: sin backend, pagos ni base de datos.
 - **`negocio.html`** — Presentación del modelo de negocio en dieciséis
-  capítulos que se recorren deslizando.
+  capítulos que se recorren deslizando. Dirigida a socios.
+- **`entrenadores.html`** — Landing comercial dirigida a entrenadores
+  independientes, con formulario de solicitud (demostrativo, no envía nada).
 
-Ambas se enlazan entre sí. Añade `?lite` a la URL para desactivar los efectos
-de movimiento en equipos lentos.
+Las tres se enlazan mediante la barra superior. Añade `?lite` a la URL para
+desactivar los efectos de movimiento en equipos lentos.
